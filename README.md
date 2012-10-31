@@ -19,7 +19,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>V8 Benchmark Suite</td>
     <td>7</td>
     <td>score(+)</td>
-    <td>From Google, and often it's target of complains from Mozilla, Opera, etc.</td>
+    <td>From Google, and often it's target of complains from Mozilla, Opera, etc. Code gets from "svn checkout http://v8.googlecode.com/svn/trunk/ v8".</td>
     <td>http://v8.googlecode.com/svn/data/benchmarks/v7/run.html</td>
     <td>V8-Benchmark-Suite/v7/run.html</td>
   </tr>
@@ -28,7 +28,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>Octane</td>
     <td>1</td>
     <td>score(+)</td>
-    <td>From Google, and its goal is to measure the performance of JavaScript code found in large, real-world web applications.</td>
+    <td>From Google, and its goal is to measure the performance of JavaScript code found in large, real-world web applications. Code gets from "svn checkout http://octane-benchmark.googlecode.com/svn/trunk/ octane-benchmark".</td>
     <td>http://octane-benchmark.googlecode.com/svn/latest/index.html</td>
     <td>Octane/index.html</td>
   </tr>
