@@ -57,7 +57,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>second(-)</td>
     <td>From Microsoft</td>
     <td>http://ie.microsoft.com/testdrive/mobile/Performance/SpeedReading/Default.html</td>
-    <td></td>
+    <td>microsoft/testdrive/mobile/Performance/SpeedReading/Default.html</td>
   </tr>
   <tr>
     <td>Canvas 2D</td>
@@ -66,7 +66,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>second(-)</td>
     <td>From Microsoft</td>
     <td>http://ie.microsoft.com/testdrive/Performance/SpeedReading/Default.html</td>
-    <td></td>
+    <td>microsoft/testdrive/Performance/SpeedReading/index.html</td>
   </tr>
   <tr>
     <td>Canvas 2D</td>
@@ -84,7 +84,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>FPS(+)</td>
     <td>From Microsoft</td>
     <td>http://ie.microsoft.com/testdrive/Performance/Galactic/Default.html</td>
-    <td></td>
+    <td>microsoft/testdrive/Performance/Galactic/Default.html</td>
   </tr>
   <tr>
     <td>Canvas 2D</td>
