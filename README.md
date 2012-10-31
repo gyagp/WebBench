@@ -21,7 +21,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>score(+)</td>
     <td>From Google, and often it's target of complains from Mozilla, Opera, etc.</td>
     <td>http://v8.googlecode.com/svn/data/benchmarks/v7/run.html</td>
-    <td></td>
+    <td>V8-Benchmark-Suite/v7/run.html</td>
   </tr>
   <tr>
     <td>JS</td>
