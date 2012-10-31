@@ -30,7 +30,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>score(+)</td>
     <td>From Google, and its goal is to measure the performance of JavaScript code found in large, real-world web applications.</td>
     <td>http://octane-benchmark.googlecode.com/svn/latest/index.html</td>
-    <td></td>
+    <td>Octane/index.html</td>
   </tr>
   <tr>
     <td>JS</td>
