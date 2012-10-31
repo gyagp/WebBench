@@ -39,7 +39,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>ms(-)</td>
     <td>From Mozilla and it should run what users usually run when browsing.</td>
     <td>http://krakenbenchmark.mozilla.org/kraken-1.1/driver.html</td>
-    <td></td>
+    <td>kraken/kraken-1.1/driver.html</td>
   </tr>
   <tr>
     <td>JS</td>
