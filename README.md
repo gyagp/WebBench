@@ -48,7 +48,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>runs/second(+)</td>
     <td>From Mozilla, and it's gradually being replaced by Kraken. As it's still important for the time being, we leave it here.</td>
     <td>http://dromaeo.com/</td>
-    <td></td>
+    <td>dromaeo/index.html</td>
   </tr>
   <tr>
     <td>Canvas 2D</td>
