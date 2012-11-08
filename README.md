@@ -93,7 +93,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>FPS(+)</td>
     <td>From Craftymind</td>
     <td>http://www.craftymind.com/factory/guimark3/bitmap/GM3_JS_Bitmap.html</td>
-    <td></td>
+    <td>GUIMark3/bitmap/GM3_JS_Bitmap.html</td>
   </tr>
   <tr>
     <td>Canvas 2D</td>
@@ -102,7 +102,16 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>FPS(+)</td>
     <td>From Craftymind</td>
     <td>http://www.craftymind.com/factory/guimark3/bitmap/GM3_JS_Bitmap_cache.html</td>
-    <td></td>
+    <td>GUIMark3/bitmap/GM3_JS_Bitmap_cache.html</td>
+  </tr>
+  <tr>
+    <td>Canvas 2D</td>
+    <td>GUIMark 3 Vector</td>
+    <td>None</td>
+    <td>FPS(+)</td>
+    <td>From Craftmind</td>
+    <td>http://www.craftymind.com/factory/guimark3/vector/GM3_JS_Vector.html</td>
+    <td>GUIMark3/vector/GM3_JS_Vector.html</td>
   </tr>
   <tr>
     <td>Canvas 2D</td>
