@@ -75,7 +75,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>FPS(+)</td>
     <td>From Microsoft</td>
     <td>http://ie.microsoft.com/testdrive/mobile/Performance/Galactic/Default.html</td>
-    <td></td>
+    <td>microsoft/testdrive/mobile/Performance/Galactic/index.html</td>
   </tr>
   <tr>
     <td>Canvas 2D</td>
