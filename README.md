@@ -120,7 +120,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>FPS(+)</td>
     <td>From Microsoft</td>
     <td>http://ie.microsoft.com/testdrive/mobile/Performance/FishIETank/Default.html</td>
-    <td></td>
+    <td>microsoft/testdrive/mobile/Performance/FishIETank/Default.html</td>
   </tr>
   <tr>
     <td>Canvas 2D</td>
@@ -129,7 +129,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>FPS(+)</td>
     <td>From Microsoft</td>
     <td>http://ie.microsoft.com/testdrive/Performance/FishIETank/Default.html</td>
-    <td></td>
+    <td>microsoft/testdrive/Performance/FishIETank/Default.html</td>
   </tr>
   <tr>
     <td></td>
