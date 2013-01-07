@@ -132,6 +132,15 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>microsoft/testdrive/Performance/FishIETank/Default.html</td>
   </tr>
   <tr>
+    <td>Canvas 2D</td>
+    <td>Canvas Performance Benchmark</td>
+    <td>None</td>
+    <td>Score(+)</td>
+    <td>From MindCat</td>
+    <td>http://flashcanvas.net/examples/dl.dropbox.com/u/1865210/mindcat/canvas_perf.html</td>
+    <td>canvas-perf/index.html</td>
+  </tr>  
+  <tr>
     <td></td>
     <td></td>
     <td></td>
