@@ -141,6 +141,15 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>canvas-perf/index.html</td>
   </tr>  
   <tr>
+    <td>Comprehensive</td>
+    <td>Peacekeeper</td>
+    <td>None</td>
+    <td>Score(+)</td>
+    <td>From Futuremark</td>
+    <td>http://peacekeeper.futuremark.com/run.action</td>
+    <td>peacekeeper/run.html</td>
+  </tr>
+  <tr>
     <td></td>
     <td></td>
     <td></td>
