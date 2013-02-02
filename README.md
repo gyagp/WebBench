@@ -150,6 +150,15 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>peacekeeper/run.html</td>
   </tr>
   <tr>
+    <td>Comprehensive</td>
+    <td>Browsermark</td>
+    <td>2.0</td>
+    <td>Score(+)</td>
+    <td>From Rightware</td>
+    <td>http://browsermark.rightware.com/tests</td>
+    <td>browsermark2.0/index.html</td>
+  </tr>
+  <tr>
     <td></td>
     <td></td>
     <td></td>
