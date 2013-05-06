@@ -8,12 +8,30 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
   <tr>
     <td>JS</td>
     <td>SunSpider</td>
+    <td>1.0</td>
+    <td>ms(-)</td>
+    <td>From WebKit to test the core JS language only, and not other browser APIs</td>
+    <td>http://www.webkit.org/perf/sunspider-1.0/sunspider-1.0/driver.html</td>
+    <td>SunSpider/sunspider-1.0/sunspider-1.0/driver.html</td>
+  </tr>
+  <tr>
+    <td>JS</td>
+    <td>SunSpider</td>
     <td>0.9.1</td>
     <td>ms(-)</td>
     <td>From WebKit to test the core JS language only, and not other browser APIs</td>
     <td>http://www.webkit.org/perf/sunspider-0.9.1/sunspider-0.9.1/driver.html</td>
-    <td>SunSpider/sunspider-0.9.1/driver.html</td>
+    <td>SunSpider/sunspider-0.9.1/sunspider-0.9.1/driver.html</td>
   </tr>
+  <tr>
+    <td>JS</td>
+    <td>SunSpider</td>
+    <td>0.9</td>
+    <td>ms(-)</td>
+    <td>From WebKit to test the core JS language only, and not other browser APIs</td>
+    <td>http://www.webkit.org/perf/sunspider-0.9/sunspider-driver.html</td>
+    <td>SunSpider/sunspider-0.9/sunspider-driver.html</td>
+  </tr>  
   <tr>
     <td>JS</td>
     <td>V8 Benchmark Suite</td>
