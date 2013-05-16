@@ -161,12 +161,21 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
   <tr>
     <td>Comprehensive</td>
     <td>Peacekeeper</td>
-    <td>None</td>
+    <td>2.0</td>
     <td>Score(+)</td>
     <td>Benchmark from Futuremark that is anatomised by ourself</td>
     <td>http://peacekeeper.futuremark.com/run.action</td>
-    <td>peacekeeper/anatomy/run.html</td>
+    <td>Peacekeeper/anatomy/run.html</td>
   </tr>
+  <tr>
+    <td>Comprehensive</td>
+    <td>Peacekeeper</td>
+    <td>2.0</td>
+    <td>Score(+)</td>
+    <td>Benchmark from Futuremark, which needs to set up a server for it.</td>
+    <td>http://peacekeeper.futuremark.com/run.action</td>
+    <td>Peacekeeper/peacekeeper2/index.html</td>
+  </tr>  
   <tr>
     <td>Comprehensive</td>
     <td>Browsermark</td>
