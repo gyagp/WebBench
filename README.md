@@ -163,9 +163,9 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>Peacekeeper</td>
     <td>None</td>
     <td>Score(+)</td>
-    <td>From Futuremark</td>
+    <td>Benchmark from Futuremark that is anatomised by ourself</td>
     <td>http://peacekeeper.futuremark.com/run.action</td>
-    <td>peacekeeper/run.html</td>
+    <td>peacekeeper/anatomy/run.html</td>
   </tr>
   <tr>
     <td>Comprehensive</td>
