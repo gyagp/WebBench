@@ -1,0 +1,235 @@
+<html>
+<head>
+<title>Vellamo See The Sun Test</title>
+<script src="Math.js"></script>
+
+<script type="text/javascript">
+var startTime;
+
+var canvasWidth;
+var canvasHeight;
+var c2d;
+
+var eyeZFunction;
+var eyeTheta;
+var centerVector;
+var upVector;
+
+var cameraFrame;
+var iData;
+
+var Texel = function (x, y, z, text, color) {
+    this.initialize(x, y, z, text, color);
+};
+Texel.prototype = {
+  pos: null, text: null, color: null,
+  tPos: null, tU: null, tV: null,
+  hide: null,
+
+  initialize: function(x, y, z, text, color){
+    this.pos = new Vector3D(x, y, z);
+    this.text = text;
+    this.color = color;
+  }
+}
+
+function init() {
+  // take references to the canvas
+  var canvasElement = document.getElementById("theCanvas");
+  canvasWidth = canvasElement.width;
+  canvasHeight = canvasElement.height;
+  c2d = canvasElement.getContext("2d");
+
+  // init view vectors
+  eyeZFunction = 0;
+  eyeTheta = 0;
+  centerVector = new Vector3D(0, 0, 0);
+  upVector = new Vector3D(0, 0, 1);
+  texelArray = new Array();
+
+  // init the text
+  var textArray = ['W', 'E', 'B', 'T', 'E', 'C', 'H', '#'];
+  var colorArray = ['#fff', '#eee', '#ddd', '#fff', '#eef', '#dde', '#ccd', '#000'];
+  var index = 0;
+  var columns = 32; // 42
+  var rows = 32; // 42
+  for (var y = 0; y < rows; y++) {
+    for (var x = 0; x < columns; x++) {
+      // get the current letter and color
+      var letter = textArray[index];
+      var color = colorArray[index];
+      index++;
+      if (index >= textArray.length)
+        index = 0;
+      // place it
+      var sU = (1 + 2 * x) / (2 * columns);
+      var sV = (1 + 2 * y) / (2 * rows);
+      var lX = canvasWidth * sU - canvasWidth / 2;
+      var lZ = canvasHeight * sV - canvasHeight / 2;
+      var texel = new Texel(lX, 0, lZ, letter, color);
+      texel.tU = sU;
+      texel.tV = sV;
+      texelArray.push(texel);
+    }
+  }
+
+  // init the source
+  cameraFrame = new Image();
+  cameraFrame.src = "butterfly.png";
+  cameraFrame.onload = function() {
+    // get the ImageData associated wiht the image
+    var icElement = document.createElement("canvas");
+    icElement.width = cameraFrame.width;
+    icElement.height = cameraFrame.height;
+    var ic2d = icElement.getContext("2d");
+    ic2d.drawImage(cameraFrame, 0, 0);
+    cameraFrame.iData = ic2d.getImageData(0, 0, cameraFrame.width, cameraFrame.height);
+
+    displace();
+    setInterval(animate, 16);
+  }
+}
+
+function displace() {
+  // get brightness as images's luma and color
+  var data = cameraFrame.iData;
+  for (var i in texelArray) {
+    var texel = texelArray[i];
+    var index = (parseInt(texel.tU * data.width) + (parseInt(texel.tV * data.height) * data.width)) * 4;
+    var bri = data.data[index+3] / 2; //(data.data[index+0] * 0.35) + (data.data[index+1] * 0.50) + (data.data[index+2] * 0.15);
+    texel.pos.y = 128 - bri;
+    texel.hide = bri == 0;
+    //texel.r = data.data[index+0];
+    //texel.g = data.data[index+1];
+    //texel.b = data.data[index+2];
+    texel.color = "rgb(" + data.data[index+0] + "," + data.data[index+1] + "," + data.data[index+2] + ")";
+  }
+}
+
+function animate() {
+  // find out the elapsed time since the last call
+  var currentTime = new Date().getTime();
+  var lastTime = startTime;
+  startTime = currentTime;
+  if (lastTime == null)
+      return;
+  var elapsedS = (currentTime - lastTime) / 1000.0;
+
+  // animate and re-render
+  updateAnimation(elapsedS);
+  render();
+}
+
+function updateAnimation(elapsedS) {
+  eyeZFunction += elapsedS / 10;
+  eyeTheta += elapsedS / 2;
+}
+
+function render() {
+  if (true) {
+    c2d.clearRect(0, 0, canvasWidth, canvasHeight);
+  } else {
+    c2d.fillStyle = "rgba(128, 128, 128, 0.8)";
+    c2d.fillRect(0, 0, canvasWidth, canvasHeight);
+  }
+
+  // setup the matrices 
+  var eyeX = 600 * Math.sin(eyeTheta * 2);
+  var eyeY = -600 * Math.cos(eyeTheta * 2);
+  var eyeZ = 50 + 100 * Math.sin(eyeZFunction);
+  var eyeVector = new Vector3D(eyeX, eyeY, eyeZ);
+  var viewMatrix = new Matrix3D;
+  viewMatrix.lookAt(eyeVector, centerVector, upVector);
+
+  // transform texels
+  var cw_2 = canvasWidth / 2.0;
+  var ch_2 = canvasHeight / 2.0;
+  var renderArray = new Array();
+  for (var i in texelArray) {
+    var texel = texelArray[i];
+    var tPos = texel.pos.clone();
+      //var mag = 4;
+      //tPos.add3f(Math.random() * 2 * mag - mag, Math.random() * 2 * mag - mag, Math.random() * 2 * mag - mag);
+    viewMatrix.transform(tPos);
+    var scale = 500 / tPos.z;
+    tPos.scale = scale - 0.5/2;
+    tPos.px = cw_2 + tPos.x * scale;
+    tPos.py = ch_2 + tPos.y * scale;
+    texel.tPos = tPos;
+    renderArray.push(texel);
+  }
+
+  // this needs "window.vellamoCanvas" to be expesed to JS!
+  var testStage = window.vellamoCanvas == null ? 2 : window.vellamoCanvas.getInt();
+  var useCircles = testStage > 0;
+  var useColors = testStage > 1;
+  var useAlpha = testStage > 2;
+  if (useColors == false)
+    c2d.fillStyle = "#ff4800";
+  // draw
+  renderArray.sort(function(a,b){return b.tPos.z - a.tPos.z;});
+  for (var i in renderArray) {
+    var texel = renderArray[i];
+    if (true && texel.hide)
+      continue;
+
+    if (useColors)
+      c2d.fillStyle = texel.color;
+
+    var p = texel.tPos;
+
+    if (useAlpha == true) {
+      c2d.globalAlpha = p.scale;
+      //var mag = Math.round(p.scale * 128);
+      //c2d.fillStyle = "rgb("+(texel.r + mag)+", "+(texel.g + mag)+", "+(texel.b + mag)+")";
+    }
+
+    if (useCircles) {
+      c2d.beginPath();
+      c2d.arc(p.px, p.py, 14 * p.scale, 0, Math.PI*2, true);
+      c2d.closePath();
+      c2d.fill();
+    } else {
+      var s = 12 * p.scale;
+      c2d.fillRect(p.px - s, p.py - s, 2*s, 2*s);
+    }
+
+    if (false) {
+      var pixSize = 22 * p.scale;
+      c2d.font = pixSize + "px helvetica";
+      c2d.fillText(texel.text, p.px, p.py);
+    }
+/*
+    c2d.save();
+    c2d.translate(p.px, p.py);
+    c2d.scale(2 * p.scale, 2 * p.scale);
+    c2d.fillText(texel.text, 0, 0);
+    c2d.restore();
+*/
+  }  
+}
+
+</script> 
+<style type="text/css">
+  body {
+    width: 100%;
+    background: black;
+    margin: 0px 0px 0px 0px;
+  }
+  div.CCC {
+    position: relative;
+    width: 460px;
+    top: 50%;
+    margin-top: -340px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
+
+</head> 
+<body onload="init()"> 
+  <div class="CCC">
+    <canvas id="theCanvas" width="460" height="680">You don't support HTML5 canvas.</canvas>
+  </div>
+</body> 
+</html>

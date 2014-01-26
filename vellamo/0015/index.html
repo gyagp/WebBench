@@ -1,0 +1,95 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Crossfading with Canvas</title>
+<meta id="viewport" name="viewport" content="width=device-width target-densityDpi=device-dpi initial-scale=0.5 user-scalable=no maximum-scale=0.5">
+<style>
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	width: 100%;
+	margin: 0px 0px 0px 0px;
+	background-color: black;
+	color: white;
+}
+canvas {
+}
+</style>
+<script src="crossfading.js"></script>
+<script>
+var loadCount = 0;
+
+function imageLoaded() {
+	var canvas, image1, image2, crossfader, elem, updater;
+
+	loadCount += 1;
+	if (loadCount === 2) {
+		canvas = document.getElementById('surface');
+		image1 = document.getElementById('image1');
+		image2 = document.getElementById('image2');
+		crossfader = new Crossfader(canvas, image1, image2);
+		elem = document.getElementById('info');
+		elem.innerHTML = 'Starting...';
+
+		updater = window.setInterval(function () {
+			var elem = document.getElementById('info');
+			elem.innerHTML = 'Frame rate: ' + crossfader.frameRate().toFixed(1) +
+				' frames/sec';
+		}, 1000);
+
+		window.setTimeout(function () {
+			crossfader.start();
+			window.setTimeout(function () {
+				var elem = document.getElementById('info');
+				window.clearInterval(updater);
+				crossfader.stop();
+				if (window.vellamo) {
+					window.vellamo.write('FINISHED. ' + elem.textContent);
+				} else {
+					console.log('FINISHED. ' + elem.textContent);
+				}
+			}, 8000);
+		}, 100);
+
+	}
+}
+</script>
+</head>
+<body style="">
+<div id="canvas" style="width:480px; height:480px; margin-left: auto; margin-right: auto; border:0px;">
+  <canvas width="480" height="480" id="surface"></canvas><br>
+</div>
+<div id="info" style="position:absolute; border:0px; text-align:center;">&nbsp;</div>
+<img id="image1" src="frame0.jpg" style="display: none" onload="imageLoaded()">
+<img id="image2" src="frame1.jpg" style="display: none" onload="imageLoaded()">
+<script>
+window.onload = function () {
+	var width, info, canvas;
+
+	// Arrange text to be on right for landscape, and bottom for portrait
+	width = screen.width;
+	info = document.getElementById('info');
+	canvas = document.getElementById('canvas');
+	if (width > screen.height) {
+		info.style.top = (240 - info.style.height) + "px";
+		info.style.left = "485px";
+		info.style.width = (width - 490) + "px";
+		canvas.style.position = "absolute";
+		canvas.style.marginLeft = "0px";
+		canvas.style.marginRight = "0px";
+		canvas.style.top = "0px";
+		canvas.style.left = "0px";
+	} else {
+		info.style.top = "485px";
+		info.style.left = ((width - 480) / 2) + "px";
+		info.style.width = "480px";
+	}
+
+	// Reset scaling on non-retina display
+	if (window.devicePixelRatio === 1) {
+		if (window.innerWidth === 2 * screen.width || window.innerWidth === 2 * screen.height) {
+			elem = document.getElementById('viewport');
+			elem.setAttribute('content', 'width=device-width target-densityDpi=device-dpi ' +
+				'initial-scale=1 maximum-scale=1 user-scalable=no');
+			document.head.appendChild(elem);
+		}
+	}
+};
+</script>
+</body></html>
