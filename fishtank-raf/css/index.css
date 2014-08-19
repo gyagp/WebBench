@@ -1,0 +1,115 @@
+body {
+	background-image: url(../img/page_background.png);
+	//background-repeat: no-repeat;
+	//background-position: right bottom;
+	font-family: "Microsoft YaHei" ! important;
+}
+
+body div.pb_back {
+	position: absolute;
+	left: 1000px;
+	top: 10px;
+	
+	font-size: 20px;
+	//background : #00FF00;
+}
+
+body div.pb_title{
+	//background-image: url(../img/title_mount.png);
+	width: 1000px;
+	height: 126px;
+	
+	margin-left: 130px;
+}
+
+body div.pb_content{
+	background : #ECECED;
+	margin-left : 120px;
+	margin-bottom : 20px;
+	width: 1050px;
+}
+
+body div.pb_copyright{
+	margin-left: 830px;
+	margin-bottom : 130px;
+	color: #ECECED;
+	font-size: 12px;
+}
+
+div.pb_title div.tl_main {
+	font-size: 40px;
+	
+	color: white;
+}
+
+div.pb_title div.tl_sub {
+	font-size: 15px;
+	
+	color: white;
+	font-style: italic;
+}
+
+div.pb_title div.tl_sub#warning_message{
+	font-size: 20px;
+	font-style: normal;
+	color: red;
+}
+
+div.pb_content div.cont_head {
+	height : 30x;
+	padding-left: 20px;
+	padding-top: 5px;
+//	background : #3C97B9
+}
+
+div.pb_content div.cont_title {
+	margin-left: 20px;
+	padding-top: 5px;
+	font-size: 22px;
+	
+}
+
+div.pb_content div.cont_detail {
+	margin-left: 40px;
+	margin-bottom: 60px;
+}
+
+div.pb_content div.cont_run_link {
+	margin-left: 40px;
+	padding-bottom: 50px;
+}
+
+div.pb_content div.cont_primary_metric {
+	//margin-left: 40px;
+	margin-bottom: 50px;
+	padding-bottom : 5px;
+	font-weight : 900;
+	background-color: #CAFF70;
+}
+
+div.cont_detail div.dl_title{
+	font-size: 16px;	
+	margin-bottom: 10px;
+}
+
+div.cont_detail div.dl_description{
+	font-size: 12px;
+	margin-bottom: 10px;
+	color: #6A4D85;
+}
+
+table.result_table {
+	margin-top : 5px;
+	margin-left : 20px;
+	margin-bottom : 5px;
+}
+
+table.result_table tr.result_table_head {
+	background-color: #DCDCDC;
+	//width: 60px;
+}
+
+table.result_table tr.result_table_content {
+	background-color: #F5F5DC;
+	//width: 60px;
+}
