@@ -1,0 +1,80 @@
+<html>
+    <body>
+        <div id="fps"></div>
+        <canvas id="myCanvas" width="900" height="900">
+        <text id="result" width="100" height="100" />
+        <script type="text/javascript" src="jperf.js"></script>
+        <script>
+            var img = new Image();
+            img.src = "asteroid.png";
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            var dx = [], dy = [];
+            var rand, rand_x, rand_y;
+
+            var framesTotal = 0;
+            var elapsedTotal = 0;
+            var rt = new jPerf.RelativeTime();
+            var fpsElement = document.getElementById("fps");
+
+            for (var i = 0; i < 1000; i++) {
+                rand = Math.random() * 4;
+                switch (i % 4) {
+                case 0:
+                    dx.push(rand);
+                    dy.push(4 - rand);
+                    break;
+                case 1:
+                    dx.push(rand);
+                    dy.push(rand - 4);
+                    break;
+                case 2:
+                    dx.push(-rand);
+                    dy.push(rand -4);
+                    break;
+                default:
+                    dx.push(-rand);
+                    dy.push(4 - rand);
+                    break;
+                }
+            }
+
+            var x = [], y = [], sign = [];
+            for (var i = 0; i < 1000; i++) {
+                rand_x = Math.random() * 800;
+                rand_y = Math.random() * 800;
+                // x.push(400 + dx[i]);
+                // y.push(400 + dy[i]);
+                x.push(rand_x);
+                y.push(rand_y);
+                sign.push(1);
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, 900, 900);
+                for (var i = 0; i < 1000; i++) {
+                    if ( x[i] > 800 || y[i] > 800 || x[i] < 0 || y[i] < 0) {
+                        sign[i] *= -1;
+                     }
+                        x[i] += dx[i] * sign[i];
+                        y[i] += dy[i] * sign[i];
+
+                    ctx.drawImage(img, x[i], y[i]);
+                }
+
+                framesTotal++;
+                elapsedTotal = rt.now() - startTime;
+                averageFPS = Math.round(framesTotal * 100000 / elapsedTotal) / 100;
+
+                fpsElement.innerHTML = 'Average FPS: ' + averageFPS;
+
+                // ctx.drawImageArray(img, new Float32Array(x), new Float32Array(y));
+                 requestAnimationFrame(draw);
+             }
+
+             // setInterval(function () { draw(); }, 16.7);
+             startTime = rt.now();
+             requestAnimationFrame(draw);
+        </script>
+    </body>
+</html>
