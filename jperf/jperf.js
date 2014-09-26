@@ -111,7 +111,7 @@
 
     var reportFPS = function(eventName) {
       var event = document.createEvent("Event");
-      event.initEvent(eventName, true, true); 
+      event.initEvent(eventName, true, true);
       event.recentFPS = recentFPS;
       event.averageFPS = averageFPS;
       document.dispatchEvent(event);
@@ -141,7 +141,7 @@
         startTime = rt.now();
         storeValue();
       };
-      
+
       if (!ref) {
         // Create a simple CSS animation
         ref = document.createElement("div");
@@ -154,7 +154,7 @@
         var s = document.createElement('style');
         s.innerHTML = keyframes;
         document.body.appendChild(s);
-        
+
         // Report fps
         intervalID = setInterval(
           function () {
@@ -164,23 +164,23 @@
               elapsedIteration = rt.now() - startTime;
               framesTotal += framesIteration;
               elapsedTotal += elapsedIteration;
-  
-              recentFPS = Math.round(framesIteration * 100000 / elapsedIteration) / 100;
-              averageFPS = Math.round(framesTotal * 100000 / elapsedTotal) / 100;
+
+              recentFPS = Math.min(Math.round(framesIteration * 100000 / elapsedIteration) / 100, 60.00);
+              averageFPS = Math.min(Math.round(framesTotal * 100000 / elapsedTotal) / 100, 60.00);
               reportFPS("CSSFPSReport");
 
             } else {
               skippedNumber++;
             }
-            
+
             startIteration();
           },
           interval);
-        
+
         startIteration();
       }
     };
-    
+
     this.stop = function() {
       cancelAnimationFrame(frameID);
       frameID = null;
@@ -192,11 +192,11 @@
     if (autoStart)
       this.start();
   }
-  
+
   jPerfProto.CSSFPSMeter = CSSFPSMeter;
 
   
-// Usage is simple, just call start() and stop(). And it also supports pause, play in video controller. 
+// Usage is simple, just call start() and stop(). And it also supports pause, play in video controller.
 // States: start, running, pause, stop
 
 
@@ -216,7 +216,7 @@
 
     var reportFPS = function(eventName) {
       var event = document.createEvent("Event");
-      event.initEvent(eventName, true, true); 
+      event.initEvent(eventName, true, true);
       event.recentFPS = recentFPS;
       event.averageFPS = averageFPS;
       document.dispatchEvent(event);
@@ -244,7 +244,7 @@
     var pauseHandler = function(event) {
       console.log(event.type);
       pause();
-    };    
+    };
 
     this.start = function(event) {
       // Common to all meters
@@ -272,8 +272,8 @@
               framesTotal += framesIteration;
               elapsedTotal += elapsedIteration;
 
-              recentFPS = Math.round(framesIteration * 100000 / elapsedIteration) / 100;
-              averageFPS = Math.round(framesTotal * 100000 / elapsedTotal) / 100;
+              recentFPS = Math.min(Math.round(framesIteration * 100000 / elapsedIteration) / 100, 60.00);
+              averageFPS = Math.min(Math.round(framesTotal * 100000 / elapsedTotal) / 100, 60.00);
               reportFPS("VideoFPSReport");
             } else {
               skippedNumber++;
@@ -283,7 +283,7 @@
           },
           interval
         );
-        
+
         startIteration();
         running = 1;
       }
