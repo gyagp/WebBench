@@ -77,23 +77,6 @@ function init()
     {
         container.appendChild(createALeaf());
     }
-
-    // Create div to show CSS FPS
-    var CSSFPSElement = document.createElement("div");
-    var style = "float:left; width:800px; height:30px: color:red;";
-    CSSFPSElement.setAttribute("style", style);
-    CSSFPSElement.innerHTML = 'Recent FPS: 0, Average FPS: 0';
-    document.body.appendChild(CSSFPSElement);
-
-    // Start CSSFPSMeter
-    var CSSFPSMeter = new window.jPerf.CSSFPSMeter();
-    CSSFPSMeter.start();
-    document.addEventListener("CSSFPSReport",
-      function(event) {
-        CSSFPSElement.innerHTML = 'Recent FPS: ' + event.recentFPS + ', Average FPS: ' + event.averageFPS;
-      },
-      false
-    );
 }
 
 
