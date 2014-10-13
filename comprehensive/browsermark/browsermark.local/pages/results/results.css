@@ -1,0 +1,60 @@
+.meta
+{
+	background-color: #38b7ff;
+}
+
+.meta-row
+{
+    width: 100%;
+    clear: both;
+    height: 20px;
+}
+
+div.meta-row:nth-of-type(even)
+{
+    /*background-color: #f0f0f0; this is for even odd color*/
+   background-color: #38b7ff;
+}
+
+.meta-label, .meta-value
+{
+    float: left;
+    /*background-color: inherit; this is for even odd color*/
+   	background-color: #38b7ff;
+    overflow: hidden;
+    padding: 0 0 0 19px;
+}
+
+.meta-label.two
+{
+    width: 68.5%;
+}
+
+.meta-value.two
+{
+    width: 27.5%;
+}
+
+.four
+{
+    width: 24.75%;
+}
+
+.six
+{
+    width: 16.5%;
+}
+
+a#pb_compare, div.results_share
+{
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+    line-height: 69px;
+    height: 69px;
+    background-color: #38b7ff;
+    border: 0px;
+    cursor: pointer;
+    color: #fff;
+    float: right;
+}

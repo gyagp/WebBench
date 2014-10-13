@@ -1,0 +1,191 @@
+.tab
+{
+    float: left;
+    margin-left: 20px;
+    padding: 10px;
+    border: solid 2px #fff;
+    border-radius: 10px 10px 0 0;
+    color: #078dda;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tab:hover
+{
+    background-color: rgba(102, 102, 102, 0.5);
+    border-color: #666;
+    color: #078dda !important;
+}
+
+.selectedtab
+{
+    background-color: #fff;
+    color: #000;
+}
+
+.tabcontent
+{
+    position: relative;
+    top: 39px;
+    border: solid 2px #fff;
+}
+
+form div
+{
+    margin-top: 12px;
+}
+
+form div label, form div select
+{
+    display: inline-block;
+    float: left;
+    clear: both;
+    width: 300px;
+    font-size: 14px;
+}
+
+form div label.disabled
+{
+    color: #545454;
+}
+
+div#results-list table
+{
+    width: 100%;
+    height: auto;
+    min-height: auto;
+    border-collapse: collapse;
+}
+
+div#results-list table tr:nth-child(4n+3),
+div#results-list table tr:nth-child(4n+4)
+{
+    background-color: rgba(66, 66, 66, 0.5);
+}
+
+div#results-list table th,
+div#results-list table td
+{
+    border: none;
+    background-color: transparent;
+    white-space: nowrap;
+    text-align: left;
+    padding-right: 10px;
+    margin: 0;
+    border-top: 1px solid #666;
+}
+
+div#results-list table .user-agent
+{
+    /*background-color: rgba(33, 33, 33, 0.5);*/
+    border-top-width: 0;
+    border-bottom: 1px solid #999;
+}
+
+div#results-list table .valid,
+div#results-list table .deleted,
+div#results-list table .version,
+div#results-list table .category
+{
+    text-align: center;
+}
+
+label
+{
+    display: inline-block;
+    width: 100px;
+}
+
+input
+{
+    width: 200px;
+}
+
+input[type="radio"], input[type="checkbox"]
+{
+    width: auto;
+}
+
+select
+{
+    width: 207px;
+}
+
+div#results-list select
+{
+    width: 80px;
+}
+div#wrapper > div#exposure > div#footer > div#footer-content > ul > li
+{
+    width: auto;
+}
+
+table#list-users
+{
+    border-width: 0;
+    width: 100%;
+    height: auto;
+    margin-left: 0;
+    border-bottom: 1px solid #999;
+}
+
+table#list-users tr
+{
+    border-top: 1px solid #999;
+}
+
+table#list-users tr:nth-of-type(even)
+{
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+table#list-users th,
+table#list-users td
+{
+    background-color: transparent;
+    border-width: 0;
+}
+
+table#list-users td select
+{
+    width: 60px;
+}
+
+table#list-users td input[type="text"]
+{
+    width: 190px;
+}
+
+table.datamining
+{
+    width: 100%;
+    whitespace: nowrap;
+    height: auto;
+}
+
+table.datamining td
+{
+    border: 0 !important;
+    height: auto;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+table.datamining tr td:last-of-type select
+{
+    width: 100%;
+    max-width: 200px;
+}
+
+table.datamining tr td:last-of-type input[type="text"]
+{
+    width: 100%;
+    max-width: 193px;
+}
+
+table.datamining tr:last-of-type
+{
+    border-top: 1px solid #fff;
+}

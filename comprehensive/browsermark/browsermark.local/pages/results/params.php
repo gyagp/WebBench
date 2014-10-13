@@ -1,0 +1,5 @@
+<?php
+
+$sTitle = 'Your score';
+
+?>
