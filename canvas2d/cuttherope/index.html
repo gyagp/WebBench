@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <title>Cut the Rope</title>
+    <link rel="canonical" href="INDEX.HTM" />
+    <meta name="description" content="Play Cut the Rope! A mysterious package has arrived, and the little monster inside has only one request… CANDY!">
+
+    <meta name="application-name" content="Cut the Rope" />
+    <meta name="msapplication-tooltip" content="Play Cut the Rope! A mysterious package has arrived, and the little monster inside has only one request… CANDY!" />
+    <meta name="msapplication-navbutton-color" content="#659729" />
+    <meta name="msApplication-ID" content="App"/>
+    <meta name="msApplication-PackageFamilyName" content="ZeptoLabUKLimited.CutTheRope_sq9zxnwrk84pj"/>
+    <link rel="shortcut icon" href="FAVICON.ICO" type="image/x-icon" />
+
+    <meta property="og:title" content="Cut the Rope" />
+    <meta property="og:type" content="game" />
+    <meta property="og:url" content="INDEX.HTM" />
+    <meta property="og:image" content="FB.PNG" />
+    <meta property="og:site_name" content="Cut the Rope" />
+    
+    <link href="CSS/CTRA684.CSS" rel="stylesheet" type="text/css">
+    <link href="CSS/PAGEA684.CSS" rel="stylesheet" type="text/css">
+
+    <link href="CSS/JQUERY_M.CSS"
+          rel="stylesheet"
+          type="text/css">
+
+     <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-28200064-1']);
+        _gaq.push(['_setDomainName', 'cuttherope.ie']);
+        _gaq.push(['_trackPageview']);
+    </script>
+	
+
+
+
+    <noscript>
+        <link href="CSS/NOJAVASC.CSS" rel="stylesheet" type="text/css">
+    </noscript>
+</head>
+<body class="ctrCursor main_page">
+
+	<div align="left" tabIndex="1"><span id="avg_fps_lable"></span> </div>
+	
+<section class="game" id="game_top">
+
+
+<aside>
+    <div class="width">
+
+
+        <div id="lang">
+            <div id="gameContainer">
+                <div id="gameArea" class="hideBeforeLoad">
+                    <canvas id="c"></canvas>
+                    <div id="loadingPanel" class="panel"></div>
+                    <div id="startBackground" class="panel"></div>
+                    <div id="menuBackground" class="panel"></div>
+                    <div id="levelBackground" class="panel">
+                        <canvas id="levelCanvas"></canvas>
+                        <div id="levelTape" class="levelTape"></div>
+                    </div>
+
+                    <div id="shadowPanel" class="panel">
+                        <canvas id="shadowCanvas" width="1024" height="576"></canvas>
+                    </div>
+                    </div>
+                    <div id="menuPanel" class="panel seethrough">
+                        <div class="panelContent">
+                            <div id="menuLogo" ></div>
+                            <div id="menuBtnVbox" class="fBtnVBox">
+                                <div id="playBtn" class="fBtn"><img src="#" /></div>
+                                <div id="optionsBtn" class="fBtn"><img src="#" /></div>
+                            </div>
+                        </div>
+                        <div id="miniOptionsMenu">
+                            <div id="optionSd"></div>
+                            <div id="optionHd"></div>
+                            <div id="optionSound" class="ctrPointer"></div>
+                            <div id="optionMsg"></div>
+                        </div>
+                    </div>
+
+                    <div id="boxPanel" class="panel seethrough">
+
+                        <canvas id="boxCanvas" width="1024" height="576"></canvas>
+
+                        <div id="pinningContent" class="iconBtn boxOption">
+                            <div id="pinnedBoxMsg" class="hideFromMouse" >
+                                <img src="images/1024/ie/IE9MSG.PNG" class="useHD" />
+                                <img src="images/768/ie/IE9MSG.PNG" class="useSD" />
+                            </div>
+                            <div id="iePrompt">
+                                <div id="installieBtn" class="fBtn"><img src="#" /></div>
+                                <div id="iePromptMsg" class="hideFromMouse"></div>
+                                <div id="installieText" class="hideFromMouse">
+                                    By clicking "Free Download" you agree to the Internet Explorer <a href="external.html?link=http://go.microsoft.com/fwlink/?linkid=190256">software license terms</a>.<br /><a href="external.html?link=http://go.microsoft.com/fwlink/?linkid=208757">Privacy Statement</a> | <a href="external.html?link=http://windows.microsoft.com/en-us/internet-explorer/products/ie-9/system-requirements">System Requirements</a>
+                                </div>
+                            </div>
+                            <div id="pinPrompt">
+                                <div id="showMeBtn" class="fBtn"><img src="#" /></div>
+                                <div id="pinPromptMsg" class="hideFromMouse"></div>
+                                <div id="pinChair" class="hideFromMouse"></div>
+                                <div id="pinChairShadow" class="hideFromMouse"></div>
+                                <div id="pinTaskBar" class="hideFromMouse"></div>
+                                <div id="pinOmNom" class="hideFromMouse">
+                                    <img src="images/1024/ie/PIN_OMNO.PNG" class="msPinSite useHD" />
+                                    <img src="images/768/ie/PIN_OMNO.PNG" class="msPinSite useSD" />
+                                    <div id="pinCursor"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="boxScore" class="hideFromMouse"><img src="#" /></div>
+
+                        <div id="boxNavBack">
+                            <div class="boxNavDisabled">
+                            </div>
+                        </div>
+                        <div id="boxNavForward">
+                            <div>
+                            </div>
+                        </div>
+                        <div id="boxBack" class="bBtn">
+                        </div>
+                    </div>
+                    <div id="levelPanel" class="panel">
+                        <div id="levelScore">
+                            <img src="#" /></div>
+                        <div id="levelBack" class="bBtn">
+                        </div>
+                        <div id="levelOptions"></div>
+                        <div id="levelResults">
+                            <div id="resultStatus"><img src="#" /></div>
+                            <div class="starCase">
+                                <div id="resultStar1" class=""></div>
+                                <div id="resultStar2" class=""></div>
+                                <div id="resultStar3" class=""></div>
+                            </div>
+                            <div id="resultTicker">
+                                <img id="resultTickerLabel" />
+                                <img id="resultTickerValue" />
+                                <img id="resultTickerMessage" />
+                            </div>
+                            <div class="line"></div>
+                            <div id="resultScore"></div>
+                            <div class="btnCase">
+                                <div id="replayBtn" class="sBtn"><img src="#" /></div>
+                                <div id="lrMenuBtn" class="sBtn"><img src="#" /></div>
+                                <div id="nextBtn" class="sBtn"><img src="#" /></div>
+                            </div>
+                            <div id="resultImproved"></div>
+                        </div>
+                    </div>
+
+                    <div id="gameCompletePanel" class="panel">
+                        <div id="congrats"></div>
+                        <div id="finalScore"><img src="#" /></div>
+                        <div id="finalShareBtn" class="mBtn"><img src="#" /><div id="ffb"></div></div>
+                        <a href="CTR/INDEX.HTM" id="finalFunBtn" class="lBtn" target="_blank"><img src="#" /><div id="funOmNom"></div></a>
+                        <div id="gameCompleteBack" class="bBtn"></div>
+                    </div>
+
+                    <div id="optionsPanel" class="panel">
+                        <div class="fBtnVBox">
+                            <div id="optionsTitle"><img src="#" /></div>
+                            <div id="soundBtn" class="mini-button ctrCursor"><div id="options-speaker"></div><div class="options-x"></div></div>
+                            <div id="musicBtn" class="mini-button ctrCursor"><div id="options-note"></div><div class="options-x"></div></div>
+                            <div id="langBtn" class="fBtn"><img src="#" /><div id="flag"></div></div>
+                            <div id="resetBtn" class="fBtn"><img src="#" /></div>
+                            <div id="creditsBtn" class="fBtn"><img src="#" /></div>
+                            <div id="dragBtn"><img id="dragText" /><div class="options-check-disabled"></div></div>
+                            <div id="cutBtn" class="ctrCursor"><img id="cutText" /><div class="options-check"></div></div>
+                        </div>
+                        <div id="optionsBack" class="bBtn"></div>
+                    </div>
+                    <div id="d" class="panel ctrPointer">
+                        <img id="dmsg" />
+                        <div id="dframe">
+                            <div id="dpic"></div>
+                        </div>
+                        <div id="dshareBtn" class="fBtn"><img src="#" /><div id="dfb"></div></div>
+                    </div>
+                    <div id="gameBtnTray">
+                        <div id="gameMsg" class="allSound"></div>
+                        <div id="gameSound" class="ctrPointer allSound"></div>
+                        <div id="gameRestartBtn" class="ctrPointer"></div>
+                        <div id="gameMenuBtn" class="ctrPointer"></div>
+                    </div>
+                    <div id="levelMenu" style="display:none">
+                        <div class="fBtnVBox">
+                            <div id="continueBtn" class="fBtn"><img src="#" /></div>
+                            <div id="skipBtn" class="fBtn"><img src="#" /></div>
+                            <div id="selectBtn" class="fBtn"><img src="#" /></div>
+                            <div id="menuBtn" class="fBtn"><img src="#" /></div>
+                        </div>
+                    </div>
+
+                    <div id="boxCutter"></div>
+                    <div id="tapeRoll"></div>
+                    <div id="video"></div>
+                    <div id="fadeToBlack" class="panel"></div>
+                </div>
+                <canvas id="e"></canvas>
+
+                 <div id="loaderWindow">
+                    <div id="loaderBubbles">
+                        <img id="loaderLogo" src="images/page/LOADER_L.PNG" />
+                        <div id="loaderCanvasHost">
+                            <canvas id="loaderCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+				
+            </div>
+        </div>
+
+</aside>
+</div>
+
+
+
+<script src="SCRIPTS/LIBRARIE.JS" type="text/javascript"></script>
+<script type="text/javascript" src="SCRIPTS/JQUERY_M.JS"></script>
+<script type="text/javascript" src="SCRIPTS/JQUERY-2.JS"></script>
+
+<script type="text/javascript" src="SCRIPTS/PAGE_LIB.JS"></script>
+<script type="text/javascript" src="SCRIPTS/PREVIEW.JS"></script>
+<script type="text/javascript" src="JS/PINIT.JS"></script>
+<script src="SCRIPTS/SM2A684.JS" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+
+
+	var browser_name; 
+	var browser_version; 
+	var browser_agent; 
+	var has_cut=false;
+	
+	
+function gather_browser_info(){
+	browser_name = navigator.appName;
+		browser_version = parseFloat(navigator.appVersion);
+	browser_agent = navigator.userAgent;
+	var bw_actual_version = browser_version, bw_actual_name = browser_name;
+	var bit_version = 0;
+	console.log(browser_agent);
+	switch(browser_name){
+		case "Microsoft Internet Explorer":
+			bw_actual_version = browser_agent.match(/MSIE[^;]*(?=;)/)[0].substr(5);
+			break;
+		case "Opera":
+			break;
+		case "Netscape":
+			if(browser_version < 5.0) break;
+			bw_actual_name = "DesktopChrome";
+			break;
+		//default:
+		}
+		
+		if(browser_agent.search("Android") != -1){
+				bw_actual_name = "AndroidChrome";
+			}
+	
+	browser_name=bw_actual_name;
+	console.log(browser_name);
+	}
+
+	
+
+	window.onload = function(){
+	gather_browser_info();
+	if (browser_name=="DesktopChrome")
+{
+	//alert("Note: the loading will last for ~5 sec in desktop chrome!\n After that, the APP will run automatically, pls be patient :)");
+	}
+  	startWorkload();
+    };
+	
+		function startWorkload() {
+	//	console.log("ww: run scenario load");
+	setLevelHandler();
+		setBoxcanvasHandler();
+		
+		runScenarioLoad();
+		runScenarioCut();
+		
+	}
+	
+		function runScenarioLoad() {
+//		console.log("ww: begin to load ctra.js");
+		loadScript('SCRIPTS/CTRA684.JS');
+		console.log("ww: get game area offset");
+	//	$("#gameArea").offset()=$("#gameArea").offset();
+		console.log($("#gameArea").offset().left);
+		console.log($("#gameArea").offset().top);
+
+	}
+	
+		function loadScript(src) {
+		var head = document.getElementsByTagName('head')[0];
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = src;
+		head.appendChild(script);
+	}
+	
+	function waitToRun(interval, func, nextCall) {
+		if (func) {
+			var call = function() {
+				func();
+				if (nextCall) {
+					nextCall();
+				}
+			}
+			setTimeout(call, interval);
+		}
+	}
+
+	function selectHDSD() {
+	console.log("ww: set HD SD trigger");
+	if (browser_name=="AndroidChrome")
+	{
+	console.log("ww: android SD trigger");
+	$("#optionSd").trigger("click");	
+	}	
+if (browser_name=="DesktopChrome")
+{
+	console.log("ww: desktop HD trigger");
+	$("#optionHd").trigger("click");	
+	}
+}	
+	
+	function selectPlay() {
+	console.log("ww: playBtn trigger");
+	$("#playBtn").trigger("click");	
+	after_cnt=0;
+	before_cnt=0;
+
+	after_cut=0;
+	before_cut=0;
+	
+	entry_start=0;
+	entry_end=0;
+	
+	entry_cnt=0;
+	}	
+	
+		
+				
+				
+	function selectRerun() {
+			console.log("ww: replayBtn trigger");
+	//desktop MS event; android touch event
+	cur_run++;
+		$("#lrMenuBtn").trigger("click");	
+		has_cut=false;
+	//waitToRun(25000, function(){console.log('NOW TOUCH to CUT');touchGame()});
+
+	after_cut=0;
+	before_cut=0;
+
+	after_cnt=0;
+	before_cnt=0;
+
+	bonus_cnt=0;
+	time_cnt=0;
+	
+	entry_cnt=0;
+	
+	entry_start=0;
+	entry_end=0;
+	
+	}	
+
+	
+	
+	function selectBox() {
+	console.log("ww: select box trigger");
+	//desktop MS event; android touch event
+	if (browser_name=="AndroidChrome")
+{
+	console.log("ww: android touch box trigger");
+	touchBoxCanvas();
+}	
+if (browser_name=="DesktopChrome")
+{
+	console.log("ww: desktop click box trigger");
+	
+	clickBoxCanvas(1024/2+$("#gameArea").offset().left, 576/2+$("#gameArea").offset().top);
+	
+		 if (document.createTouch)
+		 {
+	console.log("ww: ultrabook for ULT touch box");
+		touchULTBoxCanvas();
+		}
+	}		
+}	
+	
+function selectLevel() {
+			console.log("ww: select option 1 trigger");		
+	//	$("#option1").trigger("click");
+	//it is click event acutally in android
+	touchLevel();	
+	}
+	
+	function touchGame() {
+			console.log("ww: cut trigger");
+	//	$("#playBtn").trigger("click");	
+	//	console.log("WWFPS Now will run touch game canvas");
+if (browser_name=="AndroidChrome")
+{
+	console.log("ww: android touch game trigger");
+	touchGameCanvas();
+}	
+if (browser_name=="DesktopChrome")
+{
+	console.log("ww: desktop touch game trigger");
+	clickGameCanvas(482+$("#gameArea").offset().left, 200+$("#gameArea").offset().top);
+	
+		 if (document.createTouch)
+		 {
+	console.log("ww: ultrabook for ULT touch game");
+		touchULTGameCanvas();
+		}
+}
+has_cut=true;
+}		
+
+
+	
+			
+
+	function runScenarioCut() {
+
+
+		waitToRun(10000, function(){console.log('NOW SELECT PLAY');selectHDSD()});
+		
+		waitToRun(15000, function(){console.log('NOW SELECT PLAY');selectPlay()});
+
+		waitToRun(20000, function(){console.log('NOW SELECT BOX');selectBox()});
+	
+		waitToRun(25000, function(){console.log('NOW SELCT LEVEL');selectLevel()});
+		
+		waitToRun(30000, function(){console.log('NOW TOUCH to CUT');touchGame()});
+		
+		waitToRun(40000, function(){console.log('NOW CLICK to RERUN');selectRerun()});
+		
+		waitToRun(45000, function(){console.log('NOW SELCT LEVEL');selectLevel()});
+				
+		waitToRun(50000, function(){console.log('NOW TOUCH to CUT');touchGame()});
+				
+		waitToRun(60000, function(){console.log('NOW CLICK to RERUN');selectRerun()});
+		
+		waitToRun(65000, function(){console.log('NOW SELCT LEVEL');selectLevel()});
+				
+		waitToRun(70000, function(){console.log('NOW TOUCH to CUT');touchGame()});
+		
+		waitToRun(80000, function(){console.log('NOW SHOW RESULT');showResult()});
+		
+}
+	
+	function showResult(){
+	
+	 document.getElementById("avg_fps_lable").innerHTML = "<font face='arial' size=20 color='red'><B>Primary Metrics: " +pri_fps+" fps, version: 1.2.1</B></font>";
+	 
+     document.getElementById("avg_fps_lable").style.display = "inline";
+	}
+		
+//============================================================================android chrome SD touch event
+	
+function touchGameCanvas() {
+console.log("ww: GAME =========================enter into click Game Canvas");
+	var canvasDiv = document.getElementById('gameArea');
+	var ggcanvas = canvasDiv.childNodes[1];
+
+	  //var t = document.createTouch(window, ggcanvas, 12347, 384, 121, 384+126, 121+20, 384, 121);
+	  //var t2 = document.createTouch(window, ggcanvas, 12348, 384, 121, 384+126, 121+20, 384, 121);
+	 
+    var offset = $("#gameArea").offset();
+    var left = offset.left;
+    var top = offset.top;
+	 
+	var t = document.createTouch(window, ggcanvas, 12347, 379+left, 132+top);
+	var t2 = document.createTouch(window, ggcanvas, 12348, 414+left, 125+top);
+	var t3 = document.createTouch(window, ggcanvas, 12349, 439+left, 113+top);
+	
+	 
+	 
+    var tl = document.createTouchList(t, t);
+
+    var evt = document.createEvent("TouchEvent");
+    evt.initTouchEvent(tl, tl, tl, "touchstart", window, 384, 121, 384, 121, true, false, false, false);
+ tl=document.createTouchList(t2, t2);
+	 
+	  var evt2 = document.createEvent("TouchEvent");
+    evt2.initTouchEvent(tl, tl, tl, "touchmove", window, 384, 121, 384, 121, true, false, false, false);
+	 
+	 tl=document.createTouchList(t3, t3);
+	
+	 var evt3 = document.createEvent("TouchEvent");
+    evt3.initTouchEvent(tl, tl, tl, "touchend", window, 384, 121, 384, 121, true, false, false, false);
+			
+	console.log("WWFPS, get game start time");
+		//gameStartTime=(new Date()).getTime();
+		
+	 ggcanvas.dispatchEvent(evt);
+			console.log("WWFPS, dispatch evt 1");
+
+	 ggcanvas.dispatchEvent(evt2);
+			console.log("WWFPS, dispatch evt 2");
+	 
+	 ggcanvas.dispatchEvent(evt3);	 
+	 			console.log("WWFPS, dispatch evt 3");
+	 
+	
+}
+
+
+
+
+
+function touchULTGameCanvas() {
+console.log("ww: GAME ULT =========================enter into click Game Canvas");
+	var canvasDiv = document.getElementById('gameArea');
+	var ggcanvas = canvasDiv.childNodes[1];
+
+	  //var t = document.createTouch(window, ggcanvas, 12347, 384, 121, 384+126, 121+20, 384, 121);
+	  //var t2 = document.createTouch(window, ggcanvas, 12348, 384, 121, 384+126, 121+20, 384, 121);
+	 
+	var t = document.createTouch(window, ggcanvas, 12347, 537, 118, 537, 173, 537, 112);
+	var t2 = document.createTouch(window, ggcanvas, 12348, 642, 137, 642, 192, 642, 131);
+	var t3 = document.createTouch(window, ggcanvas, 12349, 669, 142, 669, 197, 669, 136);
+	
+	 
+	 
+    var tl = document.createTouchList(t, t);
+
+    var evt = document.createEvent("TouchEvent");
+    evt.initTouchEvent(tl, tl, tl, "touchstart", window, 384*1024/768, 121*576/432, 384*1024/768, 121*576/432, true, false, false, false);
+ tl=document.createTouchList(t2, t2);
+	 
+	  var evt2 = document.createEvent("TouchEvent");
+    evt2.initTouchEvent(tl, tl, tl, "touchmove", window, 384*1024/768, 121*576/432, 384*1024/768, 121*576/432, true, false, false, false);
+	 
+	 tl=document.createTouchList(t3, t3);
+	
+	 var evt3 = document.createEvent("TouchEvent");
+    evt3.initTouchEvent(tl, tl, tl, "touchend", window, 384*1024/768, 121*576/432, 384*1024/768, 121*576/432, true, false, false, false);
+			
+	console.log("ULT WWFPS, get game start time");
+		//gameStartTime=(new Date()).getTime();
+		
+	 ggcanvas.dispatchEvent(evt);
+			console.log("ULT WWFPS, dispatch evt 1");
+
+	 ggcanvas.dispatchEvent(evt2);
+			console.log("ULT WWFPS, dispatch evt 2");
+	 
+	 ggcanvas.dispatchEvent(evt3);	 
+	 			console.log("ULT WWFPS, dispatch evt 3");
+	 
+	
+}
+
+
+function setLevelHandler() {	
+	console.log("ww set level canvas mouse down callback");	
+	var llcan = document.getElementById('levelOptions');	
+	llcan.addEventListener("click", llcanvasclickHandler, false);
+	
+		var canvasDiv = document.getElementById('gameArea');
+	var ggcanvas = canvasDiv.childNodes[1];
+		ggcanvas.addEventListener("touchstart", ggcanvastouchHandler, false);
+	ggcanvas.addEventListener("touchmove", ggcanvastouchHandler, false);
+	ggcanvas.addEventListener("touchend", ggcanvastouchHandler, false);
+	
+	}
+	
+	
+	function ggcanvastouchHandler(event) {
+	
+	if (event.type=="touchstart")
+		console.log("LEVEL CALLBACK!!! enter into level canvas touch START callback");
+		
+	if (event.type=="touchmove")
+		console.log("LEVEL CALLBACK!!! enter into level canvas touch MOVE callback");
+
+	if (event.type=="touchend")
+		console.log("LEVEL CALLBACK!!! enter into level canvas touch END callback");
+
+		
+	console.log(event);
+
+	var touch = event.targetTouches[0];
+	console.log(touch);
+	
+	console.log(touch.pageX);
+	console.log(touch.pageY);
+	
+	console.log(touch.screenX);
+	console.log(touch.screenY);
+    
+	console.log(touch.clientX);
+	console.log(touch.clientY);
+	}
+	
+function llcanvasclickHandler(event){
+	console.log("ww: we are in CLICK!!!");
+}
+function llcanvastouchHandler(event) {
+	
+	if (event.type=="touchstart")
+		console.log("LEVEL CALLBACK!!! enter into level canvas touch START callback");
+		
+	if (event.type=="touchmove")
+		console.log("LEVEL CALLBACK!!! enter into level canvas touch MOVE callback");
+
+	if (event.type=="touchend")
+		console.log("LEVEL CALLBACK!!! enter into level canvas touch END callback");
+
+		
+	console.log(event);
+
+	var touch = event.targetTouches[0];
+	console.log(touch);
+	
+	console.log(touch.pageX);
+	console.log(touch.pageY);
+	
+	console.log(touch.screenX);
+	console.log(touch.screenY);
+    
+	console.log(touch.clientX);
+	console.log(touch.clientY);
+	}
+	
+
+	
+function touchLevel() {
+
+console.log("ww: LEVEL enter into Level Canvas");
+	var levelOptionsDiv = document.getElementById('levelOptions');
+	var leveldiv = levelOptionsDiv.childNodes[0];
+	
+  var evt = document.createEvent("MouseEvents");
+  evt.initMouseEvent("click", true, true, window,
+    0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	leveldiv.dispatchEvent(evt);
+}
+
+function setBoxcanvasHandler() {	
+	console.log("ww set box canvas mouse down callback");	
+	var bbcanvas = document.getElementById('boxCanvas');	
+	bbcanvas.addEventListener("touchstart", bbcanvastouchHandler, false);
+	bbcanvas.addEventListener("touchmove", bbcanvastouchHandler, false);
+	bbcanvas.addEventListener("touchend", bbcanvastouchHandler, false);
+	}
+	
+function bbcanvastouchHandler(event) {
+	
+	if (event.type=="touchstart")
+		console.log("BOX CALLBACK!!! enter into box canvas touch START callback");
+		
+	if (event.type=="touchmove")
+		console.log("BOX CALLBACK!!! enter into box canvas touch MOVE callback");
+
+	if (event.type=="touchend")
+		console.log("BOX CALLBACK!!! enter into box canvas touch END callback");
+
+		
+	console.log(event);
+
+	var touch = event.targetTouches[0];
+	console.log(touch);
+	
+	console.log(touch.pageX);
+	console.log(touch.pageY);
+	
+	console.log(touch.screenX);
+	console.log(touch.screenY);
+    
+	console.log(touch.clientX);
+	console.log(touch.clientY);
+	}
+	
+
+	
+function touchBoxCanvas() {
+
+console.log("ww: BOX enter into click Box Canvas");
+	var canvasDiv = document.getElementById('boxPanel');
+	var bcanvas = canvasDiv.childNodes[1];
+    var offset = $("#gameArea").offset();
+    var left = offset.left;
+    var top = offset.top;
+	  var t = document.createTouch(window, bcanvas, 12341, 403+left, 198+top);
+	  var t2 = document.createTouch(window, bcanvas, 12342, 403+left, 198+top);
+	  
+    var tl = document.createTouchList(t, t2);
+
+    var evt = document.createEvent("TouchEvent");
+    evt.initTouchEvent(tl, tl, tl, "touchstart", window, 384, 216, 384, 216, true, false, false, false);
+	 bcanvas.dispatchEvent(evt);
+	 
+	  var evt2 = document.createEvent("TouchEvent");
+    evt2.initTouchEvent(tl, tl, tl, "touchmove", window, 384, 216, 384, 216, true, false, false, false);
+bcanvas.dispatchEvent(evt2);
+	 
+	
+	 var evt3 = document.createEvent("TouchEvent");
+    evt3.initTouchEvent(tl, tl, tl, "touchend", window, 384, 216, 384, 216, true, false, false, false);
+bcanvas.dispatchEvent(evt3);
+	 
+	
+
+}
+
+
+	
+function touchULTBoxCanvas() {
+
+console.log("ww: ULT BOX enter into click Box Canvas");
+	var canvasDiv = document.getElementById('boxPanel');
+	var bcanvas = canvasDiv.childNodes[1];
+	  var t = document.createTouch(window, bcanvas, 12341, 403*1024/768, 198*576/432, 527*1024/768, 259*576/432, 403*1024/768, 198*576/432);
+	  var t2 = document.createTouch(window, bcanvas, 12342, 403*1024/768, 198*576/432, 527*1024/768, 259*576/432, 403*1024/768, 198*576/432);
+	  
+    var tl = document.createTouchList(t, t2);
+
+    var evt = document.createEvent("TouchEvent");
+    evt.initTouchEvent(tl, tl, tl, "touchstart", window, 384*1024/768, 216*576/432, 384*1024/768, 216*576/432, true, false, false, false);
+	 bcanvas.dispatchEvent(evt);
+	 
+	  var evt2 = document.createEvent("TouchEvent");
+    evt2.initTouchEvent(tl, tl, tl, "touchmove", window, 384*1024/768, 216*576/432, 384*1024/768, 216*576/432, true, false, false, false);
+bcanvas.dispatchEvent(evt2);
+	 
+	
+	 var evt3 = document.createEvent("TouchEvent");
+    evt3.initTouchEvent(tl, tl, tl, "touchend", window, 384*1024/768, 216*576/432, 384*1024/768, 216*576/432, true, false, false, false);
+bcanvas.dispatchEvent(evt3);
+	 
+	
+
+}
+
+//=====================================================desktop chrome HD MS event
+
+function clickGameCanvas(xOff, yOff, delay) {
+
+console.log("ww: GAME =========================enter into click Game Canvas");
+	var canvasDiv = document.getElementById('gameArea');
+	var ccanvas = canvasDiv.childNodes[1];
+	// var canvas = document.getElementById('clearButton');
+	var x = xOff;
+	var y = yOff;
+	//x = scaleDim(x, 1024, canvasDiv.clientWidth);
+	//y = scaleDim(y, 576, canvasDiv.clientHeight);
+	
+	console.log(window.screenX, window.screenY);
+	
+	
+	var screenX = window.screenX + canvasDiv.offsetLeft + x;
+	// var screenX = 2882;
+	var screenY = window.screenY + canvasDiv.offsetTop + y;
+	// var screenY = 366;
+	var clientX = canvasDiv.offsetLeft + x;
+	// var clientX = 1282;
+	var clientY = canvasDiv.offsetTop + y;
+	// var clientY = 305;
+
+//	var evtMSClick = mouseEvent("click", screenX, screenY, clientX, clientY);
+	
+	console.log("GAME=====================");	
+	console.log(screenX, screenY, clientX, clientY);
+	
+	
+//	dispatchEvent(ccanvas, evtMSClick);
+
+
+	//	var evtMSDown = mouseEvent("mousedown", screenX, screenY, clientX,
+		//		clientY);
+		
+			var evtMSDown = mouseEvent("mousedown", screenX, screenY, clientX,
+				clientY);
+				
+		dispatchEvent(ccanvas, evtMSDown);
+
+		// Mousemove
+		var moveX = 60 + $("#gameArea").offset().left;
+	//var moveX = 500; 
+		var moveY = 0;
+		
+		
+	//	moveX = scaleDim(moveX,1024,canvasDiv.clientWidth);
+	//	moveY = scaleDim(moveY,576,canvasDiv.clientHeight);
+
+
+	console.log("GAME==============mouse move=======");	
+	console.log(screenX + moveX, screenY
+				+ moveY, clientX + moveX, clientY + moveY);
+		
+//		var evtMSMove = mouseEvent("mousemove", screenX + moveX, screenY
+//				+ moveY, clientX + moveX, clientY + moveY);
+	var evtMSMove = mouseEvent("mousemove", screenX + moveX, screenY
+				+ moveY, clientX + moveX, clientY + moveY);
+
+	dispatchEvent(ccanvas, evtMSMove);
+
+		function eject() {
+			FPSStatus = true;
+			// Mouseup
+			var evtMSUp = mouseEvent("mouseup", screenX + moveX, screenY
+					+ moveY, clientX + moveX, clientY + moveY);
+			dispatchEvent(ccanvas, evtMSUp);
+		}
+
+		setTimeout(eject, 3000);
+		
+
+}
+
+
+	
+function clickBoxCanvas(xOff, yOff, delay) {
+
+console.log("ww: enter into click Box Canvas");
+	var canvasDiv = document.getElementById('boxPanel');
+	var bcanvas = canvasDiv.childNodes[1];
+	// var canvas = document.getElementById('clearButton');
+	var x = xOff;
+	var y = yOff;
+	x = scaleDim(x, 1024, canvasDiv.clientWidth);
+	y = scaleDim(y, 576, canvasDiv.clientHeight);
+	
+	console.log(window.screenX, window.screenY);
+	
+	
+	var screenX = window.screenX + canvasDiv.offsetLeft + x;
+	// var screenX = 2882;
+	var screenY = window.screenY + canvasDiv.offsetTop + y;
+	// var screenY = 366;
+	var clientX = canvasDiv.offsetLeft + x;
+	// var clientX = 1282;
+	var clientY = canvasDiv.offsetTop + y;
+	// var clientY = 305;
+
+	var evtMSDown = mouseEvent("mousedown", screenX, screenY, clientX, clientY);
+	
+	console.log(screenX, screenY, clientX, clientY);
+	
+	
+	dispatchEvent(bcanvas, evtMSDown);
+	// dispatchEvent(document, evtMSDown);
+	
+		console.log(screenX, screenY, clientX, clientY);
+		
+	var evtMSUp = mouseEvent("mouseup", screenX, screenY, clientX, clientY);
+	
+	console.log("ww: mouse up");
+	
+	if (delay && delay > 0) {
+		// dispatchEvent(canvas, evtMSUp);
+		setTimeout(function() {
+			return dispatchEvent(bcanvas, evtMSUp);
+		}, delay);
+	} else {
+		dispatchEvent(bcanvas, evtMSUp);
+	}
+
+}
+
+function scaleDim(value, original, current) {
+	return value * current / original;
+}
+
+
+
+function mouseEvent(type, sx, sy, cx, cy) {
+
+	var evt;
+
+	var e = {
+
+		bubbles : true,
+		cancelable : (type != "mousemove"),
+		view : window,
+		detail : 0,
+
+		screenX : sx,
+		screenY : sy,
+		clientX : cx,
+		clientY : cy,
+
+		ctrlKey : false,
+		altKey : false,
+		shiftKey : false,
+		metaKey : false,
+
+		button : 0,
+		relatedTarget : undefined
+
+	};
+
+	if (typeof (document.createEvent) == "function") {
+
+		evt = document.createEvent("MouseEvents");
+
+		evt.initMouseEvent(type, e.bubbles, e.cancelable, e.view, e.detail,
+
+		e.screenX, e.screenY, e.clientX, e.clientY,
+
+		e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
+
+		e.button, document.body.parentNode);
+
+	} else if (document.createEventObject) {
+
+		evt = document.createEventObject();
+
+		for (prop in e) {
+
+			evt[prop] = e[prop];
+
+		}
+
+		evt.button = {
+			0 : 1,
+			1 : 4,
+			2 : 2
+		}[evt.button] || evt.button;
+
+	}
+
+	return evt;
+
+}
+
+function dispatchEvent(el, evt) {
+console.log("ww: enter into dispatchEvent");
+	if (el.dispatchEvent) {
+
+	console.log("ww: dispatchEvent");
+		el.dispatchEvent(evt);
+
+	} else if (el.fireEvent) {
+
+	console.log("ww: fire dispatchEvent");
+	
+		el.fireEvent('on' + type, evt);
+	}
+	return evt;
+}
+
+
+</script>
+
+</body>
+
+</html>
