@@ -1,0 +1,11 @@
+how-to run this Benchmark:
+        add "--allow-file-access-from-files" to Chrome/ContentShell if you need to run it locally
+        open aquarium/aquarium.html in your browser
+        if run on an android device, need to put your device sideways (landscape)
+how-to modify total frames:
+        modify the value of g_numTotalFrames in aquarium.js
+how-to modify num of fish:
+        modify the value of g_numTotalFish in aquarium.js to 1, 10, 50, 100, 250, 500, 1000
+how-to modify canvas size:
+        modify default_width and default_width in aquarium.js
+      
