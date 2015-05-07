@@ -49,7 +49,8 @@ function Initialize() {
     billboard = new Billboard();
     billboard.Initialize();
 
-    drawInterval = setInterval(DrawLoop, SINGLE_CYCLE);
+    // drawInterval = setInterval(DrawLoop, SINGLE_CYCLE);
+    DrawLoop();
 }
 
 
@@ -57,7 +58,7 @@ function Initialize() {
 /* ---------------------------------------------------------------------- DrawSurface --- */
 
 function DrawLoop() {
-
+    requestAnimationFrame(DrawLoop);
     if (redrawSurface == true) {
 
         if (incrementRedraws == true) {

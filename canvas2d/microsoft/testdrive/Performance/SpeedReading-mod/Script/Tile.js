@@ -99,10 +99,12 @@ function Tile() {
     // Set the next character that we should flip to, factoring in which characters are enabled.
     this.SetNextCharacter = function () {
 
-        // On high end CPU and GPU combinations we can compose so many characters that you don't see 
-        // the animation. Cap the animation ao 10 character steps even if we could compose more characters. 
-        var additional = (composite == true && billboard.compositeWhenAvailable == true) ? Math.floor((perf.animationSteps / this.countAnimationSteps)) : 0;
-        additional = (additional > 10) ? 10 : additional;
+        // On high end CPU and GPU combinations we can compose so many characters that you don't see
+        // the animation. Cap the animation ao 10 character steps even if we could compose more characters.
+        // var additional = (composite == true && billboard.compositeWhenAvailable == true) ? Math.floor((perf.animationSteps / this.countAnimationSteps)) : 0;
+        // additional = (additional > 10) ? 10 : additional;
+        // Fix additional to speed up test and avoid random
+        additional = 10
 
         this.nextChar = (this.currentChar + 1 == NUMBER_CHARACTERS) ? 0 : this.currentChar + 1;
 

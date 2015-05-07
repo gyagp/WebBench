@@ -94,7 +94,8 @@ function BillboardPatterns() {
     this.Random = function (max) {
         for (x = 0; x < COUNT_HORIZONTAL_TILES; x++) {
             for (y = 0; y < COUNT_VERTICAL_TILES; y++) {
-                billboard.Tiles[x + (COUNT_HORIZONTAL_TILES * y)].initialDelay = Math.floor(Math.random() * max);
+                // billboard.Tiles[x + (COUNT_HORIZONTAL_TILES * y)].initialDelay = Math.floor(Math.random() * max);
+                billboard.Tiles[x + (COUNT_HORIZONTAL_TILES * y)].initialDelay = 0;
             }
         }
     }
