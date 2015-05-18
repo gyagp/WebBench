@@ -1,0 +1,265 @@
+<html>
+<head>
+<style>
+body {
+    margin: 0px;
+    background: black;
+    width: 100%;
+    height: 100%;
+}
+div {
+    float: left;
+    border: 0px;
+}
+p {
+    display: none;
+}
+.exclude {
+	visibility: hidden;
+ }
+</style>
+</head>
+<body onload="setTimeout(start, 100)">
+<div id="block" class="exclude" style="visibility:visible; display:inline;"></div>
+<div id="start" class="exclude" style="position:absolute;"><img src="results_small_bubble.png"></div>
+<div id="create" class="exclude" style="position:absolute;"><img src="results_small_bubble.png"></div>
+<div id="traverse1" class="exclude" style="position:absolute;"><img src="results_small_bubble.png"></div>
+<div id="traverse2" class="exclude" style="position:absolute;"><img src="results_small_bubble.png"></div>
+<div id="traverse3" class="exclude" style="position:absolute;"><img src="results_small_bubble.png"></div>
+<div id="traverse4" class="exclude" style="position:absolute;"><img src="results_small_bubble.png"></div>
+<div id="change" class="exclude" style="position:absolute;"><img src="results_small_bubble.png"></div>
+<div id="status" class="exclude" style="position:absolute; visibility:visible; display:table; color:white;"></div>
+<script>
+var divCount = 2809; // 53 squared, 9 goes into 480 53 times
+var divDimension;
+var winDimension;
+var maxId = 0;
+var statusIndex = 0;
+var statusText = [
+    'Create Nodes',
+    'Traverse Type 1',
+    'Traverse Type 2',
+    'Traverse Type 3',
+    'Traverse Type 4',
+    'Traverse Change Style',
+    'Done'
+];
+var statusPosition = [
+    "start",
+    "create",
+    "traverse1",
+    "traverse2",
+    "traverse3",
+    "traverse4",
+    "change",
+];
+var statusElement;
+var traversalTypeNames = [
+    'getElementById',
+    'getElementsByTagName',
+    'getElementsByTagNameWildCard',
+    'childNodes'
+];
+var traversalTypes = [
+    function (elementFunc) {    //by id
+        'use strict';
+        var divId, iString, element;
+        for (divId = 0; divId < maxId; divId += 1) {
+            iString = String(divId);
+            element = document.getElementById(iString);
+            if (element) {
+                elementFunc(element);
+            }
+        }
+    },
+    function (elementFunc) {    //by div tag
+        'use strict';
+        var collection, count, i, element;
+        collection = document.getElementsByTagName("div");
+        count = collection.length;
+        for (i = 0; i < count; i += 1) {
+            element = collection[i];
+            if (element.className !== "exclude") {
+                elementFunc(element);
+            }
+        }
+    },
+    function (elementFunc) {    //by full traversal
+        'use strict';
+        var collection, count, i, element;
+        collection = document.getElementsByTagName("*");
+        count = collection.length;
+        for (i = 0; i < count; i += 1) {
+            element = collection[i];
+            if (element.localName === "div" && element.className !== "exclude") {
+                elementFunc(element);
+            }
+        }
+    },
+    function (elementFunc) {
+        'use strict';
+        var nodes, i, element;
+        nodes = document.getElementById("block").childNodes;
+        for (i = 0; i < nodes.length; i += 1) {
+            element = nodes[i];
+            if (element.localName === "div") {
+                elementFunc(element);
+            }
+        }
+    }
+];
+var currentRed = 128;
+var currentGreen = 128;
+var currentBlue = 128;
+function nextColor() {
+    'use strict';
+    var tweak;
+    tweak = Math.floor(Math.random() * 7 - 3);
+    currentRed += tweak;
+    if (currentRed < 0) { currentRed = -currentRed; }
+    if (currentRed > 255) { currentRed = 512 - currentRed; }
+    tweak = Math.floor(Math.random() * 7 - 3);
+    currentGreen += tweak;
+    if (currentGreen < 0) { currentGreen = -currentGreen; }
+    if (currentGreen > 255) { currentGreen = 512 - currentGreen; }
+    tweak = Math.floor(Math.random() * 7 - 3);
+    currentBlue += tweak;
+    if (currentBlue < 0) { currentBlue = -currentBlue; }
+    if (currentBlue > 255) { currentBlue = 512 - currentBlue; }
+    return "rgb(" + currentRed + "," + currentGreen + "," + currentBlue + ")";
+}
+function changeColor(element) {
+    'use strict';
+    var digits, red, green, blue, styleString;
+    digits = /rgb\((\d+), (\d+), (\d+)\)/.exec(element.style.backgroundColor);
+    red = parseInt(digits[1], 10);
+    green = parseInt(digits[2], 10);
+    blue = parseInt(digits[3], 10);
+    red += 8;
+    if (red > 255) {
+        red = 255;
+        green += 8;
+        if (green > 255) {
+            green = 255;
+            blue += 8;
+            if (blue > 255) {
+                blue = 255;
+            }
+        }
+    }
+    styleString = "background-color:rgb(" + String(red) + ',' + String(green) + ',' + String(blue) + "); width:" + divDimension + "; height:" + divDimension + ";";
+    element.setAttribute("style", styleString);
+}
+function updateStatus() {
+    var textWidth, textHeight, posElement;
+    statusElement.innerText = statusText[statusIndex];
+    textWidth = statusElement.offsetWidth;
+    textHeight = statusElement.offsetHeight;
+    posElement = document.getElementById(statusPosition[statusIndex]);
+    statusElement.style.top = (posElement.offsetTop + (posElement.offsetHeight - textHeight) / 2) + "px";
+    statusElement.style.left = (posElement.offsetLeft + (posElement.offsetWidth - textWidth) / 2) + "px";
+    statusIndex += 1;
+}
+function change(report, totalTime) {
+    'use strict';
+    var start, traversalType, typeTime, element;
+    start = Number(new Date());
+    for (traversalType = 0; traversalType < traversalTypes.length; traversalType += 1) {
+        //use each one of the traversal types, and change all the colors
+        traversalTypes[traversalType](changeColor);
+    }
+    typeTime = Number(new Date()) - start;
+    report += "changeColor:" + typeTime.toFixed(2) + ',';
+    totalTime += typeTime;
+    report += 'total:' + totalTime.toFixed(2);
+    updateStatus();
+    document.getElementById("change").style.visibility = "visible";
+    if (window.vellamo) {
+        setTimeout(function () { window.vellamo.write(report); }, 1000);
+    } else {
+        //for in-browser running/debugging of benchmark
+        element = document.createElement("div");
+        element.id = "results";
+        element.setAttribute("style", "background-color:#A0A0A0; width:100%; height: 20px;");
+        element.innerText = report;
+        document.body.appendChild(element);
+    }
+}
+function simpleGetAttribute(element) {
+    return element.style.backgroundColor;
+};
+function nextTraverse(traversalType, report, totalTime) {
+    'use strict';
+    var start, iter, typeTime;
+    start = Number(new Date());
+    for (iter = 0; iter < 75; iter += 1) {
+        //use one of the traversal types, and get backgroundColor of each node
+        traversalTypes[traversalType](simpleGetAttribute);
+    }
+    typeTime = Number(new Date()) - start;
+    report += traversalTypeNames[traversalType] + ':' + typeTime.toFixed(2) + ',';
+    totalTime += typeTime;
+    traversalType += 1;
+    updateStatus();
+    document.getElementById("traverse" + traversalType).style.visibility = "visible";
+    if (traversalType < traversalTypes.length) {
+        setTimeout(function () { return nextTraverse(traversalType, report, totalTime); }, 100);
+    } else {
+        setTimeout(function () { return change(report, totalTime); }, 100);
+    }
+}
+function create() {
+    'use strict';
+    var start, block, blockDimension, id, count, div, p, typeTime, report, totalTime;
+    blockDimension = String(winDimension * 53) + "px";
+    block = document.getElementById("block");
+    start = Number(new Date());
+    id = 1;
+    for (count = 0; count < divCount; count += 1) {
+        // make sure some id values don't exist
+        if (count % 10 === 0) {
+            id += 3;
+        } else {
+            id += 1;
+        }
+        div = document.createElement("div");
+        divDimension = String(winDimension) + "px";
+        div.setAttribute("style", "background-color:" + nextColor() + "; width:" + divDimension + "; height:" + divDimension + "; display:inline;");
+        div.id = String(id);
+        block.appendChild(div);
+        p = document.createElement("p");
+        p.appendChild(document.createTextNode("text"));
+        block.appendChild(p);
+    }
+    maxId = id;
+    typeTime = Number(new Date()) - start;
+    report = "createElement:" + typeTime.toFixed(2) + ',';
+    totalTime = typeTime;
+    updateStatus();
+    document.getElementById("create").style.visibility = "visible";
+    setTimeout(function () { return nextTraverse(0, report, totalTime); }, 100);
+}
+function start() {
+    'use strict';
+    var blockDimension, block, iPosition, name, div, width, start;
+    winDimension = Math.floor(Math.max(Math.min(window.innerWidth, window.innerHeight), 480) / 53);
+    blockDimension = String(winDimension * 53);
+    block = document.getElementById("block");
+    block.style.width = blockDimension + "px";
+    block.style.height = blockDimension + "px";
+    for (iPosition = 0; iPosition < statusPosition.length; iPosition += 1) {
+    	name = statusPosition[statusPosition.length - iPosition - 1];
+    	div = document.getElementById(name);
+    	width = div.offsetWidth;
+    	div.style.top = Math.floor(iPosition * blockDimension / statusPosition.length) + "px";
+    	div.style.left = Math.floor(Math.random() * (blockDimension - 2 * width) + width) + "px";
+    }
+    statusElement = document.getElementById("status");
+    updateStatus();
+    start = document.getElementById("start");
+    start.style.visibility = "visible";
+    setTimeout(create, 20);
+}
+</script>
+</body>
+</html>
