@@ -1,0 +1,340 @@
+##- Aleksandar Rodic -##
+We would like to thank Aleksandar for his visually stunning Jellyfish WebGL-enabled application, and the generous amount of help in adapting it for use in Vellamo for use in the benchmark of the same name.
+-----
+##- Ariya Hidayat -##
+We would like to thank 'maestro' Ariya for sharing his crossfading code that makes up the heart of the Canvas Crossfader benchmark.
+
+##- Open Source Licenses: -##
+/**** Crossfading.js ****/
+  This file is part of the Ofi Labs X2 project.
+
+  Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-----
+
+/**** Math.js ****/
+ The MIT License
+
+ Copyright (c) 2010-2011 three.js Authors. All rights reserved.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+-----
+
+/**** SwipeHelper.java ****/
+/*
+ * Copyright (C) 2011 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-----
+
+/**** mongoose.c ****/
+// Copyright (c) 2004-2011 Sergey Lyubka
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+-----
+
+/**** mongoose.h ****/
+// Copyright (c) 2004-2011 Sergey Lyubka
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+-----
+
+/**** jquery-1.4.2.min.js ****/
+/*!
+ * jQuery JavaScript Library v1.4.2
+ * http://jquery.com/
+ *
+ * Copyright 2010, John Resig
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * Includes Sizzle.js
+ * http://sizzlejs.com/
+ * Copyright 2010, The Dojo Foundation
+ * Released under the MIT, BSD, and GPL Licenses.
+ *
+ * Date: Sat Feb 13 22:33:48 2010 -0500
+ */
+-----
+
+/**** aes.js ****/
+/*
+ * CryptoJS v3.1.2
+ * code.google.com/p/crypto-js
+ * (c) 2009-2013 by Jeff Mott. All rights reserved.
+ *  code.google.com/p/crypto-js/wiki/License
+ */
+-----
+
+/**** sha256.js ****/
+/*
+ * CryptoJS v3.1.2
+ * code.google.com/p/crypto-js
+ * (c) 2009-2013 by Jeff Mott. All rights reserved.
+ *  code.google.com/p/crypto-js/wiki/License
+ */
+-----
+
+/**** mode-cfb-min.js ****/
+/*
+ * CryptoJS v3.1.2
+ * code.google.com/p/crypto-js
+ * (c) 2009-2013 by Jeff Mott. All rights reserved.
+ *  code.google.com/p/crypto-js/wiki/License
+ */
+-----
+
+/**** mode-ecb.js ****/
+/*
+ * CryptoJS v3.1.2
+ * code.google.com/p/crypto-js
+ * (c) 2009-2013 by Jeff Mott. All rights reserved.
+ *  code.google.com/p/crypto-js/wiki/License
+ */
+-----
+
+/**** pad-ansix923-min.js ****/
+/*
+ * CryptoJS v3.1.2
+ * code.google.com/p/crypto-js
+ * (c) 2009-2013 by Jeff Mott. All rights reserved.
+ *  code.google.com/p/crypto-js/wiki/License
+ */
+-----
+
+/**** pad-nopadding.js ****/
+/*
+ * CryptoJS v3.1.2
+ * code.google.com/p/crypto-js
+ * (c) 2009-2013 by Jeff Mott. All rights reserved.
+ *  code.google.com/p/crypto-js/wiki/License
+ */
+-----
+
+/**** mjs.js ****/
+/*
+ * Copyright (c) 2010 Mozilla Corporation
+ * Copyright (c) 2010 Vladimir Vukicevic
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+-----
+
+/**** stream.c ****/
+/*-----------------------------------------------------------------------*/
+/* Program: Stream                                                       */
+/* Revision: $Id: stream.c,v 5.9 2009/04/11 16:35:00 mccalpin Exp mccalpin $ */
+/* Original code developed by John D. McCalpin                           */
+/* Programmers: John D. McCalpin                                         */
+/*              Joe R. Zagar                                             */
+/*                                                                       */
+/* This program measures memory transfer rates in MB/s for simple        */
+/* computational kernels coded in C.                                     */
+/*-----------------------------------------------------------------------*/
+/* Copyright 1991-2005: John D. McCalpin                                 */
+/*-----------------------------------------------------------------------*/
+/* License:                                                              */
+/*  1. You are free to use this program and/or to redistribute           */
+/*     this program.                                                     */
+/*  2. You are free to modify this program for your own use,             */
+/*     including commercial use, subject to the publication              */
+/*     restrictions in item 3.                                           */
+/*  3. You are free to publish results obtained from running this        */
+/*     program, or from works that you derive from this program,         */
+/*     with the following limitations:                                   */
+/*     3a. In order to be referred to as "STREAM benchmark results",     */
+/*         published results must be in conformance to the STREAM        */
+/*         Run Rules, (briefly reviewed below) published at              */
+/*         http://www.cs.virginia.edu/stream/ref.html                    */
+/*         and incorporated herein by reference.                         */
+/*         As the copyright holder, John McCalpin retains the            */
+/*         right to determine conformity with the Run Rules.             */
+/*     3b. Results based on modified source code or on runs not in       */
+/*         accordance with the STREAM Run Rules must be clearly          */
+/*         labelled whenever they are published.  Examples of            */
+/*         proper labelling include:                                     */
+/*         "tuned STREAM benchmark results"                              */
+/*         "based on a variant of the STREAM benchmark code"             */
+/*         Other comparable, clear and reasonable labelling is           */
+/*         acceptable.                                                   */
+/*     3c. Submission of results to the STREAM benchmark web site        */
+/*         is encouraged, but not required.                              */
+/*  4. Use of this program or creation of derived works based on this    */
+/*     program constitutes acceptance of these licensing restrictions.   */
+/*  5. Absolutely no warranty is expressed or implied.                   */
+/*-----------------------------------------------------------------------*/
+-----
+
+/**** PARSEC ****/
+
+Components: blackscholes, bodytrack, fluidanimate, streamcluster
+
+  parsec.cs.princeton.edu/license.htm
+
+Copyright (c) 2006-2009 Princeton University
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of Princeton University nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY PRINCETON UNIVERSITY ``AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL PRINCETON UNIVERSITY BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-----
+
+/**** assets/0019/index.html ****/
+"Get document height (cross-browser)" script provided for free by
+www.howtocreate.co.uk
+Customers are not charged for use of this script.
+-----
+
+/**** VSlidingPanelLayout.java ****/
+/*
+ * Copyright (C) 2012 - 2014 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-----
+
+/**** org.achartengine ****/
+/**
+ * Copyright (C) 2009 - 2013 SC 4ViewSoft SRL
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ -----
