@@ -41,12 +41,24 @@ function toggleClass(el, className) {
   }
 }
 
-function commasToBr(str) {
+function commasToBr(array) {
   var s = '';
-  for (i in str) {
-    s += str[i] + '<br />';
+  for (i in array) {
+    s += array[i] + '<br />';
   }
   return s;
+}
+
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
 }
 
 var h1 = document.createElement("h1");
@@ -111,11 +123,12 @@ if (ctx) {
 
   shaderTypes = ["VERTEX_SHADER", "FRAGMENT_SHADER"];
   precisionTypes = ["LOW_INT", "MEDIUM_INT", "HIGH_INT", "LOW_FLOAT", "MEDIUM_FLOAT", "HIGH_FLOAT"];
-  for (var i = 0; i < shaderTypes.length; i++)
+  for (var i = 0; i < shaderTypes.length; i++) {
     for (var j = 0; j < precisionTypes.length; j++) {
      pf = ctx.getShaderPrecisionFormat(eval("ctx." + shaderTypes[i]), eval("ctx." + precisionTypes[j]));
-     addLine("precisionFormat of " + precisionTypes[j] + " in " + shaderTypes[i], "rangeMin: " + pf.rangeMin + ", rangeMax: " + pf.rangeMax + ", precision: " + pf.precision);
+     addLine("precisionFormat of {0} in {1}".format(precisionTypes[j], shaderTypes[i]), "rangeMin: {0}, rangeMax: {1}, precision: {2}".format(pf.rangeMin, pf.rangeMax, pf.precision));
     }
+  }
 }
 </script>
 </body>
