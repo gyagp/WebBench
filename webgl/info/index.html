@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>WebGL Info</title>
+<style>
+.highlight {
+  background-color: yellow;
+}
+</style>
+</head>
+
+<body>
+
+<script>
+var ctx;
+var ctx2;
+
+function addLine() {
+  var row = table.insertRow(table.rows.length);
+  row.onclick = function() { toggleClass(this, 'highlight'); };
+  for (var i = 0; i < arguments.length; i++) {
+    var td = row.insertCell(i);
+    td.innerHTML = arguments[i];
+    td.style.width = "50%";
+  }
+}
+
+function getParam(str) {
+  console.log(str);
+  ret = ctx.getParameter(str);
+  if (ret)
+    return ret;
+  else
+    return "None"
+}
+
+function toggleClass(el, className) {
+  if (el.className.indexOf(className) >= 0) {
+    el.className = el.className.replace(className,"");
+  } else {
+    el.className  += className;
+  }
+}
+
+function commasToBr(str) {
+  var s = '';
+  for (i in str) {
+    s += str[i] + '<br />';
+  }
+  return s;
+}
+
+var h1 = document.createElement("h1");
+h1.align = "center";
+h1.innerHTML = "WebGL Info";
+document.body.appendChild(h1);
+
+// table
+var table = document.createElement("table");
+table.align = "center";
+table.style.width = "80%";
+table.setAttribute("border", "1");
+document.body.appendChild(table);
+
+// webgl availability
+ctxTypes = [["webgl","experimental-webgl","moz-webgl","webkit-3d"], ["webgl2", "experimental-webgl2"]];
+for (var i = 0; i < 2; i++) {
+  var canvas = document.createElement("canvas");
+  var support = false;
+  for (var j = 0; j < ctxTypes[i].length; j++) {
+    try {
+      context = canvas.getContext(ctxTypes[i][j]);
+      if (i == 0 && context && !ctx)
+        ctx = context;
+
+      if (context) {
+        addLine("WebGL" + (i + 1), "ContextType: " + ctxTypes[i][j]);
+        support = true;
+      }
+    } catch (e) {}
+  }
+
+  if (!support)
+    addLine("WebGL" + (i + 1), "Not Supported");
+}
+
+// other info
+if (ctx) {
+  addLine("Vendor", getParam(ctx.VENDOR));
+  addLine("Version", getParam(ctx.VERSION));
+  addLine("Renderer", getParam(ctx.RENDERER));
+  addLine("Shading Language Version", getParam(ctx.SHADING_LANGUAGE_VERSION));
+
+  addLine("RGBA Bits", getParam(ctx.RED_BITS) + ", " + getParam(ctx.GREEN_BITS) + ", " + getParam(ctx.BLUE_BITS) + ", " + getParam(ctx.ALPHA_BITS));
+  addLine("Depth Bits", getParam(ctx.DEPTH_BITS));
+
+  addLine("Max Vertex Attribs", getParam(ctx.MAX_VERTEX_ATTRIBS));
+  addLine("Max Vertex Texture Image Units", getParam(ctx.MAX_VERTEX_TEXTURE_IMAGE_UNITS));
+  addLine("Max Varying Vectors", getParam(ctx.MAX_VARYING_VECTORS));
+  addLine("Max Uniform Vectors", getParam(ctx.MAX_VERTEX_UNIFORM_VECTORS));
+
+  addLine("Max Combined Texture Image Units", getParam(ctx.MAX_COMBINED_TEXTURE_IMAGE_UNITS));
+  addLine("Max Texture Size", getParam(ctx.MAX_TEXTURE_SIZE));
+  addLine("Max Cube Map Texture Size", getParam(ctx.MAX_CUBE_MAP_TEXTURE_SIZE));
+  addLine("Num Compressed Texture Formats", getParam(ctx.NUM_COMPRESSED_TEXTURE_FORMATS));
+
+  addLine("Max Render Buffer Size", getParam(ctx.MAX_RENDERBUFFER_SIZE));
+  addLine("Max Viewport Dimensions", getParam(ctx.MAX_VIEWPORT_DIMS));
+  addLine("Aliased Line Width Range", getParam(ctx.ALIASED_LINE_WIDTH_RANGE));
+  addLine("Aliased Point Size Range", getParam(ctx.ALIASED_POINT_SIZE_RANGE));
+  addLine("Supported Extensions", commasToBr(ctx.getSupportedExtensions()));
+
+  shaderTypes = ["VERTEX_SHADER", "FRAGMENT_SHADER"];
+  precisionTypes = ["LOW_INT", "MEDIUM_INT", "HIGH_INT", "LOW_FLOAT", "MEDIUM_FLOAT", "HIGH_FLOAT"];
+  for (var i = 0; i < shaderTypes.length; i++)
+    for (var j = 0; j < precisionTypes.length; j++) {
+     pf = ctx.getShaderPrecisionFormat(eval("ctx." + shaderTypes[i]), eval("ctx." + precisionTypes[j]));
+     addLine("precisionFormat of " + precisionTypes[j] + " in " + shaderTypes[i], "rangeMin: " + pf.rangeMin + ", rangeMax: " + pf.rangeMax + ", precision: " + pf.precision);
+    }
+}
+</script>
+</body>
+</html>
