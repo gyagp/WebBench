@@ -11,26 +11,61 @@
 <body>
 
 <script>
+var category;
 var ctx;
-var ctx2;
+var info_array = [];
+var table;
 
-function addLine() {
-  var row = table.insertRow(table.rows.length);
-  row.onclick = function() { toggleClass(this, 'highlight'); };
-  for (var i = 0; i < arguments.length; i++) {
-    var td = row.insertCell(i);
-    td.innerHTML = arguments[i];
-    td.style.width = "50%";
+function getContext(category, ctxTypes) {
+  var canvas = document.createElement("canvas");
+  var support = false;
+  for (var i = 0; i < ctxTypes.length; i++) {
+    try {
+      ctxTmp = canvas.getContext(ctxTypes[i]);
+      if (ctxTmp) {
+        info_array.push([category, "ContextType", ctxTypes[i]]);
+        support = true;
+      }
+      if (ctxTmp) {
+        ctx = ctxTmp;
+      }
+    } catch (e) {}
   }
+
+  if (!support)
+    info_array.push([category, "Supported", "False"]);
 }
 
-function getParam(str) {
-  console.log(str);
-  ret = ctx.getParameter(str);
+function getParam(context, str) {
+  ret = context.getParameter(str);
   if (ret)
     return ret;
   else
     return "None"
+}
+
+function commasToBr(array) {
+  var s = "";
+  for (i in array) {
+    s += array[i] + "<br />";
+  }
+  return s;
+}
+
+function addLine() {
+  var tr = table.insertRow(table.rows.length);
+  tr.onclick = function() { toggleClass(this, "highlight"); };
+  for (var i = 0; i < arguments.length; i++) {
+    var td = tr.insertCell(i);
+    td.innerHTML = arguments[i];
+    td.style.wordWrap = "normal";
+    if (i == 0)
+      td.style.width = "10%";
+    else if (i == 1)
+      td.style.width = "20%";
+    else if (i == 2)
+      td.style.width = "70%";
+  }
 }
 
 function toggleClass(el, className) {
@@ -41,19 +76,11 @@ function toggleClass(el, className) {
   }
 }
 
-function commasToBr(array) {
-  var s = '';
-  for (i in array) {
-    s += array[i] + '<br />';
-  }
-  return s;
-}
-
 if (!String.prototype.format) {
   String.prototype.format = function() {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function(match, number) {
-      return typeof args[number] != 'undefined'
+      return typeof args[number] != "undefined"
         ? args[number]
         : match
       ;
@@ -61,6 +88,53 @@ if (!String.prototype.format) {
   };
 }
 
+info_array.push(["Category", "Key", "Value"]);
+
+// WebGL1
+category = "WebGL1";
+getContext(category, ["webgl","experimental-webgl","moz-webgl","webkit-3d"]);
+if (ctx) {
+  info_array.push([category, "Vendor", getParam(ctx, ctx.VENDOR)]);
+  info_array.push([category, "Version", getParam(ctx, ctx.VERSION)]);
+  info_array.push([category, "Renderer", getParam(ctx, ctx.RENDERER)]);
+  info_array.push([category, "Shading Language Version", getParam(ctx, ctx.SHADING_LANGUAGE_VERSION)]);
+
+  info_array.push([category, "RGBA Bits", getParam(ctx, ctx.RED_BITS) + ", " + getParam(ctx, ctx.GREEN_BITS) + ", " + getParam(ctx, ctx.BLUE_BITS) + ", " + getParam(ctx, ctx.ALPHA_BITS)]);
+  info_array.push([category, "Depth Bits", getParam(ctx, ctx.DEPTH_BITS)]);
+
+  info_array.push([category, "Max Vertex Attribs", getParam(ctx, ctx.MAX_VERTEX_ATTRIBS)]);
+  info_array.push([category, "Max Vertex Texture Image Units", getParam(ctx, ctx.MAX_VERTEX_TEXTURE_IMAGE_UNITS)]);
+  info_array.push([category, "Max Varying Vectors", getParam(ctx, ctx.MAX_VARYING_VECTORS)]);
+  info_array.push([category, "Max Uniform Vectors", getParam(ctx, ctx.MAX_VERTEX_UNIFORM_VECTORS)]);
+
+  info_array.push([category, "Max Combined Texture Image Units", getParam(ctx, ctx.MAX_COMBINED_TEXTURE_IMAGE_UNITS)]);
+  info_array.push([category, "Max Texture Size", getParam(ctx, ctx.MAX_TEXTURE_SIZE)]);
+  info_array.push([category, "Max Cube Map Texture Size", getParam(ctx, ctx.MAX_CUBE_MAP_TEXTURE_SIZE)]);
+
+  info_array.push([category, "Max Render Buffer Size", getParam(ctx, ctx.MAX_RENDERBUFFER_SIZE)]);
+  info_array.push([category, "Max Viewport Dimensions", getParam(ctx, ctx.MAX_VIEWPORT_DIMS)]);
+  info_array.push([category, "Aliased Line Width Range", getParam(ctx, ctx.ALIASED_LINE_WIDTH_RANGE)]);
+  info_array.push([category, "Aliased Point Size Range", getParam(ctx, ctx.ALIASED_POINT_SIZE_RANGE)]);
+  info_array.push([category, "Supported Extensions", commasToBr(ctx.getSupportedExtensions())]);
+
+  shaderTypes = ["VERTEX_SHADER", "FRAGMENT_SHADER"];
+  precisionTypes = ["LOW_INT", "MEDIUM_INT", "HIGH_INT", "LOW_FLOAT", "MEDIUM_FLOAT", "HIGH_FLOAT"];
+  for (var i = 0; i < shaderTypes.length; i++) {
+    for (var j = 0; j < precisionTypes.length; j++) {
+     pf = ctx.getShaderPrecisionFormat(eval("ctx." + shaderTypes[i]), eval("ctx." + precisionTypes[j]));
+     info_array.push([category, "precisionFormat of {0} in {1}".format(precisionTypes[j], shaderTypes[i]), "rangeMin: {0}, rangeMax: {1}, precision: {2}".format(pf.rangeMin, pf.rangeMax, pf.precision)]);
+    }
+  }
+}
+
+// WebGL2
+category = "WebGL2";
+getContext(category, ["webgl2", "experimental-webgl2"]);
+if (ctx) {
+  info_array.push([category, "Compressed Texture Formats", commasToBr(getParam(ctx, ctx.COMPRESSED_TEXTURE_FORMATS))]);
+}
+
+// display
 var h1 = document.createElement("h1");
 h1.align = "center";
 h1.innerHTML = "WebGL Info";
@@ -73,62 +147,8 @@ table.style.width = "80%";
 table.setAttribute("border", "1");
 document.body.appendChild(table);
 
-// webgl availability
-ctxTypes = [["webgl","experimental-webgl","moz-webgl","webkit-3d"], ["webgl2", "experimental-webgl2"]];
-for (var i = 0; i < 2; i++) {
-  var canvas = document.createElement("canvas");
-  var support = false;
-  for (var j = 0; j < ctxTypes[i].length; j++) {
-    try {
-      context = canvas.getContext(ctxTypes[i][j]);
-      if (i == 0 && context && !ctx)
-        ctx = context;
-
-      if (context) {
-        addLine("WebGL" + (i + 1), "ContextType: " + ctxTypes[i][j]);
-        support = true;
-      }
-    } catch (e) {}
-  }
-
-  if (!support)
-    addLine("WebGL" + (i + 1), "Not Supported");
-}
-
-// other info
-if (ctx) {
-  addLine("Vendor", getParam(ctx.VENDOR));
-  addLine("Version", getParam(ctx.VERSION));
-  addLine("Renderer", getParam(ctx.RENDERER));
-  addLine("Shading Language Version", getParam(ctx.SHADING_LANGUAGE_VERSION));
-
-  addLine("RGBA Bits", getParam(ctx.RED_BITS) + ", " + getParam(ctx.GREEN_BITS) + ", " + getParam(ctx.BLUE_BITS) + ", " + getParam(ctx.ALPHA_BITS));
-  addLine("Depth Bits", getParam(ctx.DEPTH_BITS));
-
-  addLine("Max Vertex Attribs", getParam(ctx.MAX_VERTEX_ATTRIBS));
-  addLine("Max Vertex Texture Image Units", getParam(ctx.MAX_VERTEX_TEXTURE_IMAGE_UNITS));
-  addLine("Max Varying Vectors", getParam(ctx.MAX_VARYING_VECTORS));
-  addLine("Max Uniform Vectors", getParam(ctx.MAX_VERTEX_UNIFORM_VECTORS));
-
-  addLine("Max Combined Texture Image Units", getParam(ctx.MAX_COMBINED_TEXTURE_IMAGE_UNITS));
-  addLine("Max Texture Size", getParam(ctx.MAX_TEXTURE_SIZE));
-  addLine("Max Cube Map Texture Size", getParam(ctx.MAX_CUBE_MAP_TEXTURE_SIZE));
-  addLine("Num Compressed Texture Formats", getParam(ctx.NUM_COMPRESSED_TEXTURE_FORMATS));
-
-  addLine("Max Render Buffer Size", getParam(ctx.MAX_RENDERBUFFER_SIZE));
-  addLine("Max Viewport Dimensions", getParam(ctx.MAX_VIEWPORT_DIMS));
-  addLine("Aliased Line Width Range", getParam(ctx.ALIASED_LINE_WIDTH_RANGE));
-  addLine("Aliased Point Size Range", getParam(ctx.ALIASED_POINT_SIZE_RANGE));
-  addLine("Supported Extensions", commasToBr(ctx.getSupportedExtensions()));
-
-  shaderTypes = ["VERTEX_SHADER", "FRAGMENT_SHADER"];
-  precisionTypes = ["LOW_INT", "MEDIUM_INT", "HIGH_INT", "LOW_FLOAT", "MEDIUM_FLOAT", "HIGH_FLOAT"];
-  for (var i = 0; i < shaderTypes.length; i++) {
-    for (var j = 0; j < precisionTypes.length; j++) {
-     pf = ctx.getShaderPrecisionFormat(eval("ctx." + shaderTypes[i]), eval("ctx." + precisionTypes[j]));
-     addLine("precisionFormat of {0} in {1}".format(precisionTypes[j], shaderTypes[i]), "rangeMin: {0}, rangeMax: {1}, precision: {2}".format(pf.rangeMin, pf.rangeMax, pf.precision));
-    }
-  }
+for (i = 0; i < info_array.length; i++) {
+  addLine(info_array[i][0], info_array[i][1], info_array[i][2]);
 }
 </script>
 </body>
