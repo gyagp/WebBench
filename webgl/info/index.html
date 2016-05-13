@@ -9,73 +9,7 @@
 </head>
 
 <body>
-
 <script>
-var category;
-var ctx;
-var info_array = [];
-var table;
-
-function getContext(category, ctxTypes) {
-  var canvas = document.createElement("canvas");
-  var support = false;
-  for (var i = 0; i < ctxTypes.length; i++) {
-    try {
-      ctxTmp = canvas.getContext(ctxTypes[i]);
-      if (ctxTmp) {
-        info_array.push([category, "ContextType", ctxTypes[i]]);
-        support = true;
-      }
-      if (ctxTmp) {
-        ctx = ctxTmp;
-      }
-    } catch (e) {}
-  }
-
-  if (!support)
-    info_array.push([category, "Supported", "False"]);
-}
-
-function getParam(context, str) {
-  ret = context.getParameter(str);
-  if (ret)
-    return ret;
-  else
-    return "None"
-}
-
-function commasToBr(array) {
-  var s = "";
-  for (i in array) {
-    s += array[i] + "<br />";
-  }
-  return s;
-}
-
-function addLine() {
-  var tr = table.insertRow(table.rows.length);
-  tr.onclick = function() { toggleClass(this, "highlight"); };
-  for (var i = 0; i < arguments.length; i++) {
-    var td = tr.insertCell(i);
-    td.innerHTML = arguments[i];
-    td.style.wordWrap = "normal";
-    if (i == 0)
-      td.style.width = "10%";
-    else if (i == 1)
-      td.style.width = "20%";
-    else if (i == 2)
-      td.style.width = "70%";
-  }
-}
-
-function toggleClass(el, className) {
-  if (el.className.indexOf(className) >= 0) {
-    el.className = el.className.replace(className,"");
-  } else {
-    el.className  += className;
-  }
-}
-
 if (!String.prototype.format) {
   String.prototype.format = function() {
     var args = arguments;
@@ -88,53 +22,94 @@ if (!String.prototype.format) {
   };
 }
 
-info_array.push(["Category", "Key", "Value"]);
+if (!Object.keys) {
+  Object.keys = function (object) {
+    var keys = [];
 
-// WebGL1
-category = "WebGL1";
-getContext(category, ["webgl","experimental-webgl","moz-webgl","webkit-3d"]);
-if (ctx) {
-  info_array.push([category, "Vendor", getParam(ctx, ctx.VENDOR)]);
-  info_array.push([category, "Version", getParam(ctx, ctx.VERSION)]);
-  info_array.push([category, "Renderer", getParam(ctx, ctx.RENDERER)]);
-  info_array.push([category, "Shading Language Version", getParam(ctx, ctx.SHADING_LANGUAGE_VERSION)]);
-
-  info_array.push([category, "RGBA Bits", getParam(ctx, ctx.RED_BITS) + ", " + getParam(ctx, ctx.GREEN_BITS) + ", " + getParam(ctx, ctx.BLUE_BITS) + ", " + getParam(ctx, ctx.ALPHA_BITS)]);
-  info_array.push([category, "Depth Bits", getParam(ctx, ctx.DEPTH_BITS)]);
-
-  info_array.push([category, "Max Vertex Attribs", getParam(ctx, ctx.MAX_VERTEX_ATTRIBS)]);
-  info_array.push([category, "Max Vertex Texture Image Units", getParam(ctx, ctx.MAX_VERTEX_TEXTURE_IMAGE_UNITS)]);
-  info_array.push([category, "Max Varying Vectors", getParam(ctx, ctx.MAX_VARYING_VECTORS)]);
-  info_array.push([category, "Max Uniform Vectors", getParam(ctx, ctx.MAX_VERTEX_UNIFORM_VECTORS)]);
-
-  info_array.push([category, "Max Combined Texture Image Units", getParam(ctx, ctx.MAX_COMBINED_TEXTURE_IMAGE_UNITS)]);
-  info_array.push([category, "Max Texture Size", getParam(ctx, ctx.MAX_TEXTURE_SIZE)]);
-  info_array.push([category, "Max Cube Map Texture Size", getParam(ctx, ctx.MAX_CUBE_MAP_TEXTURE_SIZE)]);
-
-  info_array.push([category, "Max Render Buffer Size", getParam(ctx, ctx.MAX_RENDERBUFFER_SIZE)]);
-  info_array.push([category, "Max Viewport Dimensions", getParam(ctx, ctx.MAX_VIEWPORT_DIMS)]);
-  info_array.push([category, "Aliased Line Width Range", getParam(ctx, ctx.ALIASED_LINE_WIDTH_RANGE)]);
-  info_array.push([category, "Aliased Point Size Range", getParam(ctx, ctx.ALIASED_POINT_SIZE_RANGE)]);
-  info_array.push([category, "Supported Extensions", commasToBr(ctx.getSupportedExtensions())]);
-
-  shaderTypes = ["VERTEX_SHADER", "FRAGMENT_SHADER"];
-  precisionTypes = ["LOW_INT", "MEDIUM_INT", "HIGH_INT", "LOW_FLOAT", "MEDIUM_FLOAT", "HIGH_FLOAT"];
-  for (var i = 0; i < shaderTypes.length; i++) {
-    for (var j = 0; j < precisionTypes.length; j++) {
-     pf = ctx.getShaderPrecisionFormat(eval("ctx." + shaderTypes[i]), eval("ctx." + precisionTypes[j]));
-     info_array.push([category, "precisionFormat of {0} in {1}".format(precisionTypes[j], shaderTypes[i]), "rangeMin: {0}, rangeMax: {1}, precision: {2}".format(pf.rangeMin, pf.rangeMax, pf.precision)]);
+    for (var key in object) {
+      if (object.hasOwnProperty(key)) {
+        keys.push(key);
+      }
     }
   }
 }
 
-// WebGL2
-category = "WebGL2";
-getContext(category, ["webgl2", "experimental-webgl2"]);
-if (ctx) {
-  info_array.push([category, "Compressed Texture Formats", commasToBr(getParam(ctx, ctx.COMPRESSED_TEXTURE_FORMATS))]);
+function toggleClass(el, className) {
+  if (el.className.indexOf(className) >= 0) {
+    el.className = el.className.replace(className,"");
+  } else {
+    el.className  += className;
+  }
 }
 
-// display
+function getParam(context, str) {
+  ret = context.getParameter(str);
+  if (ret)
+    return ret;
+  else
+    return "None"
+}
+
+function commasToBr(array) {
+  var s = "";
+  for (var i in array) {
+    s += array[i] + "<br />";
+  }
+  return s;
+}
+</script>
+
+<script>
+var ctxTypes = {
+  "WebGL1": ["webgl",,"experimental-webgl", "moz-webgl","webkit-3d"],
+  "WebGL2": ["webgl2", "experimental-webgl2"],
+}
+var categories = Object.keys(ctxTypes);
+var info = new Array();
+var lines = 0;
+
+for (var i = 0; i < categories.length; i++) {
+  var category = categories[i];
+  ctxType = ctxTypes[category];
+  var ctx = getContext(category, ctxType);
+  if (ctx) {
+    info[category].push(["Vendor", getParam(ctx, ctx.VENDOR)]);
+    info[category].push(["Version", getParam(ctx, ctx.VERSION)]);
+    info[category].push(["Renderer", getParam(ctx, ctx.RENDERER)]);
+    info[category].push(["Shading Language Version", getParam(ctx, ctx.SHADING_LANGUAGE_VERSION)]);
+
+    info[category].push(["RGBA Bits", getParam(ctx, ctx.RED_BITS) + ", " + getParam(ctx, ctx.GREEN_BITS) + ", " + getParam(ctx, ctx.BLUE_BITS) + ", " + getParam(ctx, ctx.ALPHA_BITS)]);
+    info[category].push(["Depth Bits", getParam(ctx, ctx.DEPTH_BITS)]);
+
+    info[category].push(["Max Vertex Attribs", getParam(ctx, ctx.MAX_VERTEX_ATTRIBS)]);
+    info[category].push(["Max Vertex Texture Image Units", getParam(ctx, ctx.MAX_VERTEX_TEXTURE_IMAGE_UNITS)]);
+    info[category].push(["Max Varying Vectors", getParam(ctx, ctx.MAX_VARYING_VECTORS)]);
+    info[category].push(["Max Uniform Vectors", getParam(ctx, ctx.MAX_VERTEX_UNIFORM_VECTORS)]);
+
+    info[category].push(["Max Combined Texture Image Units", getParam(ctx, ctx.MAX_COMBINED_TEXTURE_IMAGE_UNITS)]);
+    info[category].push(["Max Texture Size", getParam(ctx, ctx.MAX_TEXTURE_SIZE)]);
+    info[category].push(["Max Cube Map Texture Size", getParam(ctx, ctx.MAX_CUBE_MAP_TEXTURE_SIZE)]);
+
+    info[category].push(["Max Render Buffer Size", getParam(ctx, ctx.MAX_RENDERBUFFER_SIZE)]);
+    info[category].push(["Max Viewport Dimensions", commasToBr(getParam(ctx, ctx.MAX_VIEWPORT_DIMS))]);
+    info[category].push(["Aliased Line Width Range", commasToBr(getParam(ctx, ctx.ALIASED_LINE_WIDTH_RANGE))]);
+    info[category].push(["Aliased Point Size Range", commasToBr(getParam(ctx, ctx.ALIASED_POINT_SIZE_RANGE))]);
+    info[category].push(["Supported Extensions", commasToBr(ctx.getSupportedExtensions())]);
+    info[category].push(["Compressed Texture Formats", commasToBr(getParam(ctx, ctx.COMPRESSED_TEXTURE_FORMATS))]);
+
+    shaderTypes = ["VERTEX_SHADER", "FRAGMENT_SHADER"];
+    precisionTypes = ["LOW_INT", "MEDIUM_INT", "HIGH_INT", "LOW_FLOAT", "MEDIUM_FLOAT", "HIGH_FLOAT"];
+
+    for (var j = 0; j < shaderTypes.length; j++) {
+      for (var k = 0; k < precisionTypes.length; k++) {
+        pf = ctx.getShaderPrecisionFormat(eval("ctx." + shaderTypes[j]), eval("ctx." + precisionTypes[k]));
+        info[category].push(["precisionFormat of {0} in {1}".format(precisionTypes[k], shaderTypes[j]), "rangeMin: {0}, rangeMax: {1}, precision: {2}".format(pf.rangeMin, pf.rangeMax, pf.precision)]);
+      }
+    }
+  }
+}
+
+// UI
 var h1 = document.createElement("h1");
 h1.align = "center";
 h1.innerHTML = "WebGL Info";
@@ -147,8 +122,68 @@ table.style.width = "80%";
 table.setAttribute("border", "1");
 document.body.appendChild(table);
 
-for (i = 0; i < info_array.length; i++) {
-  addLine(info_array[i][0], info_array[i][1], info_array[i][2]);
+addLine("Category", "Key", "Value");
+
+for (i = 0; i < info[categories[0]].length; i++) {
+  var same = true;
+  var value = info[categories[0]][i];
+  for (j = 1; j < categories.length; j++) {
+    if (info[categories[j]].length <= i || info[categories[j]][i][1] != info[categories[0]][i][1]) {
+      same = false;
+      break;
+    }
+  }
+  if (same) {
+    addLine("Common", info["WebGL1"][i][0], info["WebGL1"][i][1]);
+  } else {
+    for (k = 0; k < categories.length; k++) {
+      category = categories[k];
+      if (info[category].length > i)
+        addLine(category, info[category][i][0], info[category][i][1]);
+    }
+  }
+
+}
+
+function getContext(category, ctxTypes) {
+  var ctx;
+  var canvas = document.createElement("canvas");
+  info[category] = new Array();
+  ctxTypeStr = "None";
+  for (var i = 0; i < ctxTypes.length; i++) {
+    try {
+      ctxTmp = canvas.getContext(ctxTypes[i]);
+      if (ctxTmp) {
+        if (ctxTypeStr == "None") {
+          ctxTypeStr = ctxType[i];
+        } else {
+          ctxTypeStr += ", " + ctxType[i];
+        }
+        ctx = ctxTmp;
+      }
+    } catch (e) {}
+  }
+  info[category].push(["contextType", ctxTypeStr]);
+  return ctx;
+}
+
+function addLine() {
+  var tr = table.insertRow(table.rows.length);
+  tr.onclick = function() { toggleClass(this, "highlight"); };
+  for (var i = 0; i < arguments.length; i++) {
+    var td = tr.insertCell(i);
+    td.innerHTML = arguments[i];
+    if (lines == 0) {
+      td.style.fontWeight = "bold";
+    }
+    if (i == 0)
+      td.style.width = "10%";
+    else if (i == 1)
+      td.style.width = "20%";
+    else if (i == 2)
+      td.style.width = "70%";
+  }
+  lines++;
 }
 </script>
 </body>
