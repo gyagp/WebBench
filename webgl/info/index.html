@@ -73,10 +73,15 @@ for (var i = 0; i < categories.length; i++) {
   ctxType = ctxTypes[category];
   var ctx = getContext(category, ctxType);
   if (ctx) {
-    info[category].push(["Vendor", getParam(ctx, ctx.VENDOR)]);
     info[category].push(["Version", getParam(ctx, ctx.VERSION)]);
-    info[category].push(["Renderer", getParam(ctx, ctx.RENDERER)]);
     info[category].push(["Shading Language Version", getParam(ctx, ctx.SHADING_LANGUAGE_VERSION)]);
+
+    info[category].push(["Vendor", getParam(ctx, ctx.VENDOR)]);
+    info[category].push(["Renderer", getParam(ctx, ctx.RENDERER)]);
+
+    var dri = ctx.getExtension("WEBGL_debug_renderer_info");
+    info[category].push(["Unmasked Vendor", getParam(ctx, dri.UNMASKED_VENDOR_WEBGL)]);
+    info[category].push(["Unmasked Renderer", getParam(ctx, dri.UNMASKED_RENDERER_WEBGL)]);
 
     info[category].push(["RGBA Bits", getParam(ctx, ctx.RED_BITS) + ", " + getParam(ctx, ctx.GREEN_BITS) + ", " + getParam(ctx, ctx.BLUE_BITS) + ", " + getParam(ctx, ctx.ALPHA_BITS)]);
     info[category].push(["Depth Bits", getParam(ctx, ctx.DEPTH_BITS)]);
