@@ -44,7 +44,7 @@ function toggleClass(el, className) {
 
 function getParam(context, str) {
   ret = context.getParameter(str);
-  if (ret)
+  if (ret == 0 || ret)
     return ret;
   else
     return "None"
@@ -57,60 +57,79 @@ function commasToBr(array) {
   }
   return s;
 }
+
+function getPrecision(info_category, shaderType) {
+    precisionTypes = ["LOW_INT", "MEDIUM_INT", "HIGH_INT", "LOW_FLOAT", "MEDIUM_FLOAT", "HIGH_FLOAT"];
+    for (var i = 0; i < precisionTypes.length; i++) {
+      pf = gl.getShaderPrecisionFormat(eval("gl." + shaderType), eval("gl." + precisionTypes[i]));
+      info_category.push(["precisionFormat of {0} in {1}".format(precisionTypes[i], shaderType), "rangeMin: {0}, rangeMax: {1}, precision: {2}".format(pf.rangeMin, pf.rangeMax, pf.precision)]);
+    }
+}
 </script>
 
 <script>
-var ctxTypes = {
+var glTypes = {
   "WebGL1": ["webgl",,"experimental-webgl", "moz-webgl","webkit-3d"],
   "WebGL2": ["webgl2", "experimental-webgl2"],
 }
-var categories = Object.keys(ctxTypes);
+var categories = Object.keys(glTypes);
 var info = new Array();
 var lines = 0;
 
 for (var i = 0; i < categories.length; i++) {
   var category = categories[i];
-  ctxType = ctxTypes[category];
-  var ctx = getContext(category, ctxType);
-  if (ctx) {
-    info[category].push(["Version", getParam(ctx, ctx.VERSION)]);
-    info[category].push(["Shading Language Version", getParam(ctx, ctx.SHADING_LANGUAGE_VERSION)]);
+  glType = glTypes[category];
+  var gl = getContext(category, glType);
+  if (gl) {
+    // basic
+    info[category].push(["Version", getParam(gl, gl.VERSION)]);
+    info[category].push(["Shading Language Version", getParam(gl, gl.SHADING_LANGUAGE_VERSION)]);
+    info[category].push(["Vendor", getParam(gl, gl.VENDOR)]);
+    info[category].push(["Renderer", getParam(gl, gl.RENDERER)]);
+    var ext = gl.getExtension("WEBGL_debug_renderer_info");
+    info[category].push(["Unmasked Vendor", getParam(gl, ext.UNMASKED_VENDOR_WEBGL)]);
+    info[category].push(["Unmasked Renderer", getParam(gl, ext.UNMASKED_RENDERER_WEBGL)]);
 
-    info[category].push(["Vendor", getParam(ctx, ctx.VENDOR)]);
-    info[category].push(["Renderer", getParam(ctx, ctx.RENDERER)]);
+    // vertex shader
+    info[category].push(["Splitter", "Vertex Shader"]);
+    info[category].push(["Max Vertex Attribs", getParam(gl, gl.MAX_VERTEX_ATTRIBS)]);
+    info[category].push(["Max Vertex Texture Image Units", getParam(gl, gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS)]);
+    info[category].push(["Max Vertex Uniform Vectors", getParam(gl, gl.MAX_VERTEX_UNIFORM_VECTORS)]);
+    info[category].push(["Max Vertex Varying Vectors", getParam(gl, gl.MAX_VARYING_VECTORS)]);
+    getPrecision(info[category], "VERTEX_SHADER")
 
-    var dri = ctx.getExtension("WEBGL_debug_renderer_info");
-    info[category].push(["Unmasked Vendor", getParam(ctx, dri.UNMASKED_VENDOR_WEBGL)]);
-    info[category].push(["Unmasked Renderer", getParam(ctx, dri.UNMASKED_RENDERER_WEBGL)]);
+    // fragment shader
+    info[category].push(["Splitter", "Fragment Shader"]);
+    info[category].push(["Max Fragment Texture Image Units", getParam(gl, gl.MAX_TEXTURE_IMAGE_UNITS)]);
+    info[category].push(["Max Fragment Uniform Vectors", getParam(gl, gl.MAX_FRAGMENT_UNIFORM_VECTORS)]);
+    getPrecision(info[category], "FRAGMENT_SHADER")
 
-    info[category].push(["RGBA Bits", getParam(ctx, ctx.RED_BITS) + ", " + getParam(ctx, ctx.GREEN_BITS) + ", " + getParam(ctx, ctx.BLUE_BITS) + ", " + getParam(ctx, ctx.ALPHA_BITS)]);
-    info[category].push(["Depth Bits", getParam(ctx, ctx.DEPTH_BITS)]);
+    // framebuffer
+    info[category].push(["Splitter", "Framebuffer"]);
+    info[category].push(["RGBA Bits", getParam(gl, gl.RED_BITS) + ", " + getParam(gl, gl.GREEN_BITS) + ", " + getParam(gl, gl.BLUE_BITS) + ", " + getParam(gl, gl.ALPHA_BITS)]);
+    info[category].push(["Depth Bits", getParam(gl, gl.DEPTH_BITS)]);
+    info[category].push(["Stencil Bits", getParam(gl, gl.STENCIL_BITS)]);
+    info[category].push(["Max Render Buffer Size", getParam(gl, gl.MAX_RENDERBUFFER_SIZE)]);
+    info[category].push(["Max Viewport Dimensions", commasToBr(getParam(gl, gl.MAX_VIEWPORT_DIMS))]);
 
-    info[category].push(["Max Vertex Attribs", getParam(ctx, ctx.MAX_VERTEX_ATTRIBS)]);
-    info[category].push(["Max Vertex Texture Image Units", getParam(ctx, ctx.MAX_VERTEX_TEXTURE_IMAGE_UNITS)]);
-    info[category].push(["Max Varying Vectors", getParam(ctx, ctx.MAX_VARYING_VECTORS)]);
-    info[category].push(["Max Uniform Vectors", getParam(ctx, ctx.MAX_VERTEX_UNIFORM_VECTORS)]);
+    // texture
+    info[category].push(["Splitter", "Texture"]);
+    info[category].push(["Max Combined Texture Image Units", getParam(gl, gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS)]);
+    info[category].push(["Max Texture Size", getParam(gl, gl.MAX_TEXTURE_SIZE)]);
+    info[category].push(["Max Cube Map Texture Size", getParam(gl, gl.MAX_CUBE_MAP_TEXTURE_SIZE)]);
+    var ext = gl.getExtension("EXT_texture_filter_anisotropic");
+    info[category].push(["Max Anisotropy", getParam(gl, ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT)]);
 
-    info[category].push(["Max Combined Texture Image Units", getParam(ctx, ctx.MAX_COMBINED_TEXTURE_IMAGE_UNITS)]);
-    info[category].push(["Max Texture Size", getParam(ctx, ctx.MAX_TEXTURE_SIZE)]);
-    info[category].push(["Max Cube Map Texture Size", getParam(ctx, ctx.MAX_CUBE_MAP_TEXTURE_SIZE)]);
+    // rasterizer
+    info[category].push(["Splitter", "Rasterizer"]);
+    info[category].push(["Aliased Line Width Range", commasToBr(getParam(gl, gl.ALIASED_LINE_WIDTH_RANGE))]);
+    info[category].push(["Aliased Point Size Range", commasToBr(getParam(gl, gl.ALIASED_POINT_SIZE_RANGE))]);
+    info[category].push(["Compressed Texture Formats", commasToBr(getParam(gl, gl.COMPRESSED_TEXTURE_FORMATS))]);
 
-    info[category].push(["Max Render Buffer Size", getParam(ctx, ctx.MAX_RENDERBUFFER_SIZE)]);
-    info[category].push(["Max Viewport Dimensions", commasToBr(getParam(ctx, ctx.MAX_VIEWPORT_DIMS))]);
-    info[category].push(["Aliased Line Width Range", commasToBr(getParam(ctx, ctx.ALIASED_LINE_WIDTH_RANGE))]);
-    info[category].push(["Aliased Point Size Range", commasToBr(getParam(ctx, ctx.ALIASED_POINT_SIZE_RANGE))]);
-    info[category].push(["Supported Extensions", commasToBr(ctx.getSupportedExtensions())]);
-    info[category].push(["Compressed Texture Formats", commasToBr(getParam(ctx, ctx.COMPRESSED_TEXTURE_FORMATS))]);
-
-    shaderTypes = ["VERTEX_SHADER", "FRAGMENT_SHADER"];
-    precisionTypes = ["LOW_INT", "MEDIUM_INT", "HIGH_INT", "LOW_FLOAT", "MEDIUM_FLOAT", "HIGH_FLOAT"];
-
-    for (var j = 0; j < shaderTypes.length; j++) {
-      for (var k = 0; k < precisionTypes.length; k++) {
-        pf = ctx.getShaderPrecisionFormat(eval("ctx." + shaderTypes[j]), eval("ctx." + precisionTypes[k]));
-        info[category].push(["precisionFormat of {0} in {1}".format(precisionTypes[k], shaderTypes[j]), "rangeMin: {0}, rangeMax: {1}, precision: {2}".format(pf.rangeMin, pf.rangeMax, pf.precision)]);
-      }
-    }
+    // misc
+    info[category].push(["Splitter", "Miscellaneous"]);
+    info[category].push(["Antialias", getParam(gl, gl.SAMPLES)]);
+    info[category].push(["Supported Extensions", commasToBr(gl.getSupportedExtensions())]);
   }
 }
 
@@ -128,6 +147,7 @@ table.setAttribute("border", "1");
 document.body.appendChild(table);
 
 addLine("Category", "Key", "Value");
+addLine("Common", "Splitter", "Basic Info");
 
 for (i = 0; i < info[categories[0]].length; i++) {
   var same = true;
@@ -147,46 +167,54 @@ for (i = 0; i < info[categories[0]].length; i++) {
         addLine(category, info[category][i][0], info[category][i][1]);
     }
   }
-
 }
 
-function getContext(category, ctxTypes) {
-  var ctx;
+function getContext(category, glTypes) {
+  var gl;
   var canvas = document.createElement("canvas");
   info[category] = new Array();
-  ctxTypeStr = "None";
-  for (var i = 0; i < ctxTypes.length; i++) {
+  glTypeStr = "None";
+  for (var i = 0; i < glTypes.length; i++) {
     try {
-      ctxTmp = canvas.getContext(ctxTypes[i]);
-      if (ctxTmp) {
-        if (ctxTypeStr == "None") {
-          ctxTypeStr = ctxType[i];
+      glTmp = canvas.getContext(glTypes[i], {alpha: true, antialias: true, depth: true, premultipliedAlpha:true, preserveDrawingBuffer: true, stencil: true});
+      if (glTmp) {
+        if (glTypeStr == "None") {
+          glTypeStr = glType[i];
         } else {
-          ctxTypeStr += ", " + ctxType[i];
+          glTypeStr += ", " + glType[i];
         }
-        ctx = ctxTmp;
+        gl = glTmp;
       }
     } catch (e) {}
   }
-  info[category].push(["contextType", ctxTypeStr]);
-  return ctx;
+  info[category].push(["contextType", glTypeStr]);
+  return gl;
 }
 
 function addLine() {
   var tr = table.insertRow(table.rows.length);
   tr.onclick = function() { toggleClass(this, "highlight"); };
+
+  if (arguments[0] == "Common" && arguments[1] == "Splitter") {
+    arguments = [arguments[2]];
+  }
   for (var i = 0; i < arguments.length; i++) {
     var td = tr.insertCell(i);
     td.innerHTML = arguments[i];
     if (lines == 0) {
       td.style.fontWeight = "bold";
+      td.style.background = "orange";
+    }
+    if (arguments.length == 1) {
+      td.style.fontWeight = "bold";
+      td.style.color = "blue";
     }
     if (i == 0)
       td.style.width = "10%";
     else if (i == 1)
-      td.style.width = "20%";
+      td.style.width = "40%";
     else if (i == 2)
-      td.style.width = "70%";
+      td.style.width = "50%";
   }
   lines++;
 }
