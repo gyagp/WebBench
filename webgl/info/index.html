@@ -44,7 +44,9 @@ function toggleClass(el, className) {
 
 function getParam(context, str) {
   ret = context.getParameter(str);
-  if (ret == 0 || ret)
+  if ((Object.prototype.toString.call(ret) === "[object Array]" || Object.prototype.toString.call(ret) === "[object Uint32Array]") && ret.length === 0)
+    return ["None"]
+  else if (ret == 0 || ret)
     return ret;
   else
     return "None"
@@ -195,7 +197,7 @@ function addLine() {
   var tr = table.insertRow(table.rows.length);
   tr.onclick = function() { toggleClass(this, "highlight"); };
 
-  if (arguments[0] == "Common" && arguments[1] == "Splitter") {
+  if (arguments[1] == "Splitter") {
     arguments = [arguments[2]];
   }
   for (var i = 0; i < arguments.length; i++) {
