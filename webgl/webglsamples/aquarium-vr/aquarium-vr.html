@@ -117,6 +117,8 @@ CANVAS {
     // Ensures the polyfill is always active when initialized, even if the
     // native API is available. This is probably NOT what most pages want.
     ALWAYS_APPEND_POLYFILL_DISPLAY: true,
+    // Use polyfill getVRDisplays().
+    FORCE_USE_POLYFILL: true,
   }
 </script>
 <script type="text/javascript" src="utils/webvr-polyfill.js"></script>

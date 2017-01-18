@@ -2341,7 +2341,8 @@ function WebVRPolyfill() {
                                  navigator.getVRDisplays :
                                  null;
 
-  if (!this.nativeLegacyWebVRAvailable && !this.nativeWebVRAvailable) {
+  //if (!this.nativeLegacyWebVRAvailable && !this.nativeWebVRAvailable) {
+  if ((!this.nativeLegacyWebVRAvailable && !this.nativeWebVRAvailable) || window.WebVRConfig.FORCE_USE_POLYFILL) {
     this.enablePolyfill();
     if (window.WebVRConfig.ENABLE_DEPRECATED_API) {
       this.enableDeprecatedPolyfill();
@@ -3872,6 +3873,9 @@ window.WebVRConfig = Util.extend({
   // and just use polyfilled displays.
   // https://bugs.chromium.org/p/chromium/issues/detail?id=727969
   GET_VR_DISPLAYS_TIMEOUT: 1000,
+
+  // Use polyfill navigator.getVRDevices() even if native exists.
+  FORCE_USE_POLYFILL: false,
 }, window.WebVRConfig);
 
 if (!window.WebVRConfig.DEFER_INITIALIZATION) {
