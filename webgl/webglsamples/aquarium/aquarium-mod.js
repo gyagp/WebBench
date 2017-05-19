@@ -1103,7 +1103,7 @@ function initialize() {
     setCanvasSize(canvas, g.globals.width, g.globals.height);
   }
 
-  function render(elapsedTime, projectionMatrix, viewMatrix) {
+  function render(elapsedTime, projectionMatrix, modelViewMatrix) {
     /*
     var now = theClock.getTime();
     var elapsedTime;
@@ -1181,7 +1181,7 @@ function initialize() {
     var yOff = height * g.net.offset[1] * g.net.offsetMult;
     if (g_vrDisplay && g_vrDisplay.isPresenting) {
       fast.matrix4.copy(projection, projectionMatrix);
-      fast.matrix4.inverse(viewInverse, viewMatrix);
+      fast.matrix4.inverse(viewInverse, modelViewMatrix);
     } else {
       fast.matrix4.frustum(
         projection,
