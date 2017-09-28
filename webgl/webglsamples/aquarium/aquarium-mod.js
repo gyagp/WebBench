@@ -104,7 +104,7 @@ var g_netUI = [
 var g_fishTable = [
   {
     name: 'SmallFishA',
-    num: [0, 3, 36, 76, 206, 500-40-40-2-2, 1000-80-80-2-2, 2000-80-80-2-2, 4000-80-80-2-2, 6000-80-80-2-2, 7000-80-80-2-2, 8000-80-80-2-2, 9000-80-80-2-2, 10000-80-80-2-2, 50],
+    num: [0, 3, 36, 76, 206, 500-40-40-2-2, 1000-80-80-2-2, 2000-80-80-2-2, 4000-80-80-2-2, 6000-80-80-2-2, 7000-80-80-2-2, 8000-80-80-2-2, 9000-80-80-2-2, 10000-80-80-2-2, 12000-80-80-2-2, 14000-80-80-2-2, 16000-80-80-2-2, 18000-80-80-2-2, 20000-80-80-2-2, 50],
     speed: 1,
     speedRange: 1.5,
     radius: 30,
@@ -120,7 +120,7 @@ var g_fishTable = [
   },
   {
     name: 'MediumFishA',
-    num: [0, 3, 6, 10, 20, 40, 80, 80, 80, 80, 80, 80, 80, 80, 10],
+    num: [0, 3, 6, 10, 20, 40, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 10],
     speed: 1,
     speedRange: 2,
     radius: 10,
@@ -136,7 +136,7 @@ var g_fishTable = [
   },
   {
     name: 'MediumFishB',
-    num: [0, 2, 6, 10, 20, 40, 80, 80, 80, 80, 80, 80, 80, 80, 10],
+    num: [0, 2, 6, 10, 20, 40, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 10],
     speed: 0.5,
     speedRange: 4,
     radius: 10,
@@ -152,7 +152,7 @@ var g_fishTable = [
   },
   {
     name: 'BigFishA',
-    num: [1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3],
+    num: [1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3],
     speed: 0.5,
     speedRange: 0.5,
     radius: 50,
@@ -172,7 +172,7 @@ var g_fishTable = [
   },
   {
     name: 'BigFishB',
-    num: [0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+    num: [0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     speed: 0.5,
     speedRange: 0.5,
     radius: 45,
@@ -785,9 +785,9 @@ function advanceViewSettings() {
  */
 function setSetting(elem, id) {
   switch (id) {
-  case 15:
+  case 20:
     break;
-  case 14:
+  case 19:
     advanceViewSettings();
     break;
   default:
@@ -1685,7 +1685,7 @@ function setupCountButtons() {
   } else {
     setSetting(document.getElementById("setSetting2"), 2);
   }
-  setSetting(document.getElementById("setSetting14"), 14);
+  setSetting(document.getElementById("setSetting14"), 19);
 }
 
 function initUIStuff() {
@@ -1766,7 +1766,7 @@ $(function(){
     g.net.fovFudge = 1;
   }
 
-  $('#setSetting15').click(function() {
+  $('#setSetting20').click(function() {
       $("#uiContainer").toggle('slow'); return false; });
   $("#uiContainer").toggle();
   $('#options').click(function() {
