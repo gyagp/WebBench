@@ -9,6 +9,13 @@
 </head>
 
 <body>
+<text>
+<h1 align="center">WebGL Info</h1>
+<b>Advanced usage</b><p>
+Some parameters are supported in url, and you may use them as "index.html?key0=value0&key1=value1". Supported parameters are:<p>
+1) maxDrawingBufferSize=(true|false): Get the max DrawingBuffer size<p>
+</text>
+
 <script>
 if (!String.prototype.format) {
   String.prototype.format = function() {
@@ -66,6 +73,19 @@ function getPrecision(info_category, shaderType) {
       pf = gl.getShaderPrecisionFormat(eval("gl." + shaderType), eval("gl." + precisionTypes[i]));
       info_category.push(["precisionFormat of {0} in {1}".format(precisionTypes[i], shaderType), "rangeMin: {0}, rangeMax: {1}, precision: {2}".format(pf.rangeMin, pf.rangeMax, pf.precision)]);
     }
+}
+
+function getParamByName(name, url) {
+  if (!url)
+    url = window.location.href;
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i");
+  var results = regex.exec(url);
+  if (!results)
+    return null;
+  if (!results[2])
+    return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 </script>
 
@@ -132,15 +152,11 @@ for (var i = 0; i < categories.length; i++) {
     info[category].push(["Splitter", "Miscellaneous"]);
     info[category].push(["Antialias", getParam(gl, gl.SAMPLES)]);
     info[category].push(["Supported Extensions", commasToBr(gl.getSupportedExtensions())]);
-    info[category].push(["Max DrawingBuffer Size (Width*Height)", getMaxDrawingBufferSize(gl)]);
+    if (getParamByName("maxDrawingBufferSize") == "true") {
+      info[category].push(["Max DrawingBuffer Size (Width*Height)", getMaxDrawingBufferSize(gl)]);
+    }
   }
 }
-
-// UI
-var h1 = document.createElement("h1");
-h1.align = "center";
-h1.innerHTML = "WebGL Info";
-document.body.appendChild(h1);
 
 // table
 var table = document.createElement("table");
