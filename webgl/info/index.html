@@ -132,6 +132,7 @@ for (var i = 0; i < categories.length; i++) {
     info[category].push(["Splitter", "Miscellaneous"]);
     info[category].push(["Antialias", getParam(gl, gl.SAMPLES)]);
     info[category].push(["Supported Extensions", commasToBr(gl.getSupportedExtensions())]);
+    info[category].push(["Max DrawingBuffer Size (Width*Height)", getMaxDrawingBufferSize(gl)]);
   }
 }
 
@@ -191,6 +192,20 @@ function getContext(category, glTypes) {
   }
   info[category].push(["contextType", glTypeStr]);
   return gl;
+}
+
+function getMaxDrawingBufferSize(gl) {
+  size = 4096;
+  while (true) {
+    gl.canvas.width = size;
+    gl.canvas.height = size;
+    if (gl.canvas.width == gl.drawingBufferWidth && gl.canvas.height == gl.drawingBufferHeight) {
+      size *= 2;
+    } else {
+      break;
+    }
+  }
+  return gl.drawingBufferWidth + '*' + gl.drawingBufferHeight;
 }
 
 function addLine() {
