@@ -215,11 +215,9 @@ function getMaxDrawingBufferSize(gl) {
   while (true) {
     gl.canvas.width = size;
     gl.canvas.height = size;
-    if (gl.canvas.width == gl.drawingBufferWidth && gl.canvas.height == gl.drawingBufferHeight) {
-      size *= 2;
-    } else {
+    if (gl.canvas.width != gl.drawingBufferWidth || gl.canvas.height != gl.drawingBufferHeight)
       break;
-    }
+    size *= 2;
   }
   return gl.drawingBufferWidth + '*' + gl.drawingBufferHeight;
 }
