@@ -1256,7 +1256,7 @@ function initialize() {
       fast.matrix4.copy(projection, projectionMatrix);
       calculateViewMatrix(viewInverse, pose.orientation, eyePosition);
 
-      // Hard coded FPS translation vector and pin the whole UI in front of the user in VR mode. This hard coded position 
+      // Hard coded FPS translation vector and pin the whole UI in front of the user in VR mode. This hard coded position
       // vector used only once here.
       calculateViewMatrix(uiMatrix, pose.orientation, [0, 0, 10]);
       g_vrUi.render(projection, fast.matrix4.inverse(uiMatrix, uiMatrix), [pose.orientation]);
@@ -1722,7 +1722,7 @@ function initialize() {
       g_vrDisplay.getFrameData(g_frameData);
       if (g_vrDisplay.isPresenting || g_polyfill) {
 
-        /* VR UI is enabled in VR Mode. VR UI has two mode, menu mode is the mirror of control panel of 
+        /* VR UI is enabled in VR Mode. VR UI has two mode, menu mode is the mirror of control panel of
          * aquarium and non-menu mode may presents fps(could be turn off) in front of user. These two
          * mode is controlled by isMenuMode flag and this flag is set by any keyboard event or gamepad
          * button click.
@@ -1731,7 +1731,7 @@ function initialize() {
         // Set fps and prepare rendering it.
         g_vrUi.setFps(g_fpsTimer.averageFPS);
 
-        // Query gamepad button clicked event. 
+        // Query gamepad button clicked event.
         g_vrUi.queryGamepadStatus();
 
         if (g_vrUi.isMenuMode) {
@@ -1758,7 +1758,7 @@ function initialize() {
             }
           }
         }
-      
+
         gl.viewport(0, 0, canvas.width * 0.5, canvas.height);
         render(elapsedTime, g_frameData.leftProjectionMatrix, g_frameData.pose);
 
@@ -2081,7 +2081,7 @@ var VR = (function() {
       console.log("PolyFill enabled.");
       removeButton(pfButton);
       if (vrButton) removeButton(vrButton);
-      pfButton = addButton("Exit Emulated VR", "P", "/vr/button.png", onDisablePolyFill);
+      pfButton = addButton("Exit Emulated VR", "P", getCurrentUrl() + "/vr_assets/button.png", onDisablePolyFill);
       g_polyfill = true;
       init();
   }
