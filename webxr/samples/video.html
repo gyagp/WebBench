@@ -1,0 +1,139 @@
+<!DOCTYPE html> 
+<html> 
+<head>
+<title>Test - Video FPS</title>
+<script type="text/javascript" src="./jperf.js"></script>
+</head>
+<body> 
+
+<div style="text-align:center"> 
+  <button onclick="playPause()">Play/Pause</button> 
+  <button onclick="makeFS()">Full Screen</button>
+</div>
+<div style="text-align:center"> 
+  <button onclick="load1080p_h264_60fps()">1080p-h264-60fps</button>
+  <button onclick="load4k()">4K-h264-60fps</button>
+  <button onclick="load8k()">8K-h264-60fps</button>
+  <button onclick="load8k_30fps()">8K-h264-30fps</button>
+</div>
+<div style="text-align:center"> 
+  <button onclick="load1080p_vp8_60fps()">1080p-vp8-60fps</button>
+  <button onclick="load4k_vp8_60fps()">4k-vp8-60fps</button>
+  <button onclick="load8k_vp8_60fps()">8k-vp8-60fps</button>
+</div>
+<div style="text-align:center"> 
+  <button onclick="load1080p_vp9_60fps()">1080p-vp9-60fps</button>
+  <button onclick="load4k_vp9_60fps()">4k-vp9-60fps</button>
+  <button onclick="load8k_vp9_60fps()">8k-vp9-60fps</button>
+</div>
+<div style="text-align:center"> 
+  <video id="video1" width="420" src="./media/textures/pano_vp9_1920X1080_60fps.webm"  loop>
+    Your browser does not support HTML5 video.
+  </video>
+</div> 
+
+<script> 
+var myVideo = document.getElementById("video1"); 
+
+function playPause() { 
+    if (myVideo.paused) 
+        myVideo.play(); 
+    else 
+        myVideo.pause(); 
+} 
+
+function makeFS() { 
+    myVideo.webkitRequestFullscreen();
+} 
+
+function load4k() { 
+    myVideo.src = './media/textures/gear360_driving_h264_3840X2160_60fps.mp4';
+    //myVideo.type = 'video/mp4';
+} 
+
+function load1080p_h264_60fps() { 
+    myVideo.src = './media/textures/gear360_driving_h264_1920X1080_60fps.mp4';
+    //myVideo.type = 'video/mp4';
+} 
+function load8k() { 
+    myVideo.src = './media/textures/gear360_driving_h264_7680X4320_60fps.mp4'; 
+    //myVideo.type = 'video/mp4';
+} 
+function load8k_30fps() { 
+    myVideo.src = './media/textures/gear360_driving_h264_7680X4320_30fps.mp4'; 
+    //myVideo.type = 'video/mp4';
+} 
+function load1080p_vp9_60fps() { 
+    myVideo.src = './media/textures/pano_vp9_1920X1080_60fps.webm';
+    //myVideo.type = 'video/webm';
+} 
+function load4k_vp9_60fps() { 
+    myVideo.src = './media/textures/pano_vp9_3840X2160_60fps.webm';
+    //myVideo.type = 'video/webm';
+} 
+function load8k_vp9_60fps() { 
+    myVideo.src = './media/textures/pano_vp9_7680X4320_60fps.webm';
+    //myVideo.type = 'video/webm';
+} 
+function load1080p_vp8_60fps() { 
+    myVideo.src = './media/textures/pano_vp8_1920X1080_60fps.webm';
+    //myVideo.type = 'video/webm';
+} 
+function load4k_vp8_60fps() { 
+    myVideo.src = './media/textures/pano_vp8_3840X2160_60fps.webm';
+    //myVideo.type = 'video/webm';
+} 
+function load8k_vp8_60fps() { 
+    myVideo.src = './media/textures/pano_vp8_7680X4320_60fps.webm';
+    //myVideo.type = 'video/webm';
+} 
+
+
+// Create div to show video FPS
+var videoFPSElement = document.createElement("div");
+var fpsSpanElement = document.createElement("span");
+var style = "float:left; width:800px; height:30px: color:red;";
+videoFPSElement.setAttribute("style", style);
+fpsSpanElement.setAttribute("id", "fps");
+videoFPSElement.innerHTML = 'Recent FPS: 0, Average FPS: 0';
+document.body.appendChild(videoFPSElement);
+document.body.appendChild(fpsSpanElement);
+var sumR = 0;
+var i = 0;
+
+// Start FPSMeter
+var videoFPSmeter = new window.jPerf.VideoFPSMeter(myVideo);
+videoFPSmeter.start();
+document.addEventListener("VideoFPSReport",
+  function(event) {
+//    videoFPSElement.innerHTML = 'Recent FPS: ' + event.recentFPS + ', Average FPS: ' + event.averageFPS + ', source: ' + myVideo.src;
+//    console.log('Recent FPS: ' + event.recentFPS + ', Average FPS: ' + event.averageFPS + ', source: ' + myVideo.src);
+//    fpsSpanElement.innerHTML = event.recentFPS;
+//  },
+//  false
+    sumR = sumR + event.recentFPS;
+    i = i + 1;
+    videoFPSElement.innerHTML = 'Recent FPS: ' + event.recentFPS + ', Average FPS: ' + event.averageFPS + ', RecentAverage FPS: ' + sumR/i;
+    console.log('Recent FPS: ' + event.recentFPS + ', Average FPS: ' + event.averageFPS + ', RecentAverage FPS: ' + sumR/i);
+    fpsSpanElement.innerHTML = event.recentFPS;
+  },
+  false
+);
+</script> 
+
+<p>Video play performance testing with "video" element.</p>
+<p>Steps:</p>
+<ol type="1">
+<li>Download <a href='https://developer.microsoft.com/en-us/windows/hardware/windows-assessment-deployment-kit'>Windows ADK</a> and install.</li>
+<li>Launch “Windows Performance Recorder” (WPR)</li>
+<li>Select the profile “GPU Activity” under Resource Analysis.</li>
+<li>Change the logging mode to “file” and detail level to “verbose”.</li>
+<li>Play the video in Chrome and click “Start” in WPR to begin recording</li>
+<li>Click “stop” when enough time passes. This will create a trace file (ETL).</li>
+<li>Open the ETL in gpuview.exe (it’s under the same directory as WPR)</li>
+<li>In gpuview, click "Charts" -> "Toggle Present Charts". (HotKey Ctrl+F6) </li>
+<li>The FPS is shown under the chrome.exe for chrome.</li>
+</ol>
+
+</body> 
+</html>

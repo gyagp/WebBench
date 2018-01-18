@@ -1,0 +1,87 @@
+<!DOCTYPE html> 
+<html> 
+<head>
+<title>Test - Video FPS</title>
+<script type="text/javascript" src="./jperf.js"></script>
+</head>
+<body> 
+
+<div style="text-align:center"> 
+  <button onclick="playPause()">Play/Pause</button> 
+  <button onclick="makeFS()">Full Screen</button>
+  <button onclick="load4k()">4K</button>
+  <button onclick="load8k()">8K</button>
+  <br><br>
+  <video id="video1" width="420" loop>
+    <source src="./media/textures/gear360_driving_h264_3840X2160_60fps.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+</div> 
+
+<script> 
+(function(){
+  var script=document.createElement('script');
+  script.onload=function(){
+    var stats=new Stats();
+    stats.showPanel(0);
+    document.body.appendChild(stats.dom);
+    requestAnimationFrame(function loop(){
+      stats.update();
+      requestAnimationFrame(loop)
+    });
+  };
+  script.src='//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';
+  document.head.appendChild(script);}
+)()
+var myVideo = document.getElementById("video1"); 
+
+function playPause() { 
+    if (myVideo.paused) 
+        myVideo.play(); 
+    else 
+        myVideo.pause(); 
+} 
+
+function makeFS() { 
+    myVideo.webkitRequestFullscreen();
+} 
+
+function load4k() { 
+    myVideo.src = './media/textures/vp8_360p_30fps.webm';
+    myVideo.type = 'video/webm'
+} 
+
+function load8k() { 
+    myVideo.src = './media/textures/gear360_driving_h264_7680X4320_60fps.mp4'; 
+} 
+
+// Create div to show video FPS
+var videoFPSElement = document.createElement("div");
+var fpsSpanElement = document.createElement("span");
+var style = "float:left; width:800px; height:30px: color:red;";
+videoFPSElement.setAttribute("style", style);
+fpsSpanElement.setAttribute("id", "fps");
+videoFPSElement.innerHTML = 'Recent FPS: 0, Average FPS: 0';
+document.body.appendChild(videoFPSElement);
+document.body.appendChild(fpsSpanElement);
+
+// Start FPSMeter
+var videoFPSmeter = new window.jPerf.VideoFPSMeter(myVideo);
+videoFPSmeter.start();
+document.addEventListener("VideoFPSReport",
+  function(event) {
+    videoFPSElement.innerHTML = 'Recent FPS: ' + event.recentFPS + ', Average FPS: ' + event.averageFPS;
+    console.log('Recent FPS: ' + event.recentFPS + ', Average FPS: ' + event.averageFPS);
+    fpsSpanElement.innerHTML = event.recentFPS;
+  },
+  false
+);
+</script> 
+
+<p>Video play performance testing with "video" element.</p>
+<p>Steps:</p>
+<ol type="1">
+</ol>
+
+</body> 
+</html>
