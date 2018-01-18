@@ -110,6 +110,16 @@ CANVAS {
 <script type="text/javascript" src="../jquery-ui-1.8.2.custom/js/jquery-ui-1.8.2.custom.min.js"></script>
 <script type="text/javascript" src="../khronos/webgl-debug.js"></script>
 <script type="text/javascript" src="../tdl/base.js"></script>
+<script>
+  var WebVRConfig = {
+    // Prevents the polyfill from initializing automatically.
+    DEFER_INITIALIZATION: true,
+    // Ensures the polyfill is always active when initialized, even if the
+    // native API is available. This is probably NOT what most pages want.
+    ALWAYS_APPEND_POLYFILL_DISPLAY: true,
+  }
+</script>
+<script type="text/javascript" src="utils/webvr-polyfill.js"></script>
 <script type="text/javascript" src="../aquarium/aquarium-common.js"></script>
 <script type="text/javascript" src="utils/vr_text_renderer.js"></script>
 <script type="text/javascript" src="utils/gamepad.js"></script>
