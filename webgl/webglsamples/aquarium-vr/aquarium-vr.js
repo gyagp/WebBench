@@ -34,10 +34,14 @@ var g_sceneGroups = {};  // the placement of the models
 var g_fog = true;
 var g_requestId;
 var g_numFish = [1, 100, 500, 1000, 5000, 10000, 15000, 20000, 25000, 30000];
+var g_frameData;
+var g_vrDisplay;
+var g_vrUi;
 
 //g_debug = true;
 //g_drawOnce = true;
 
+var g_numSharks        = 0;
 var g_tailOffsetMult   = 1;
 var g_endOfDome        = Math.PI / 8;
 var g_tankRadius       = 74;
@@ -341,12 +345,12 @@ var g_sceneInfo = [
 ];
 
 var g_skyBoxUrls = [
-  'assets/GlobeOuter_EM_positive_x.jpg',
-  'assets/GlobeOuter_EM_negative_x.jpg',
-  'assets/GlobeOuter_EM_positive_y.jpg',
-  'assets/GlobeOuter_EM_negative_y.jpg',
-  'assets/GlobeOuter_EM_positive_z.jpg',
-  'assets/GlobeOuter_EM_negative_z.jpg'
+  '../aquarium/assets/GlobeOuter_EM_positive_x.jpg',
+  '../aquarium/assets/GlobeOuter_EM_negative_x.jpg',
+  '../aquarium/assets/GlobeOuter_EM_positive_y.jpg',
+  '../aquarium/assets/GlobeOuter_EM_negative_y.jpg',
+  '../aquarium/assets/GlobeOuter_EM_positive_z.jpg',
+  '../aquarium/assets/GlobeOuter_EM_negative_z.jpg'
 //  'static_assets/skybox/InteriorCubeEnv_EM.png'
 ]
 
@@ -505,7 +509,7 @@ Scene.prototype.onload_ = function(data, exception) {
       var textures = {};
       for (var name in model.textures) {
         textures[name] = tdl.textures.loadTexture(
-            'assets/' + model.textures[name], true);
+            '../aquarium/assets/' + model.textures[name], true);
       }
       // setup vertices
       var arrays = {};
@@ -610,7 +614,7 @@ function setShaders() {
 
 function loadScene(name, opt_programIds, fog) {
   var scene = new Scene(opt_programIds, fog);
-  scene.load("assets/" + name + ".js");
+  scene.load("../aquarium/assets/" + name + ".js");
   return scene;
 }
 
@@ -623,7 +627,7 @@ function loadScenes() {
 }
 
 function loadPlacement() {
-  tdl.io.loadJSON('assets/PropPlacement.js', function(json, exception) {
+  tdl.io.loadJSON('../aquarium/assets/PropPlacement.js', function(json, exception) {
     if (exception) {
       throw exception
     } else {
@@ -663,7 +667,7 @@ function initLightRay(info) {
  */
 function setupLaser() {
   var textures = {
-      colorMap: tdl.textures.loadTexture('static_assets/beam.png')};
+      colorMap: tdl.textures.loadTexture('../aquarium/static_assets/beam.png')};
   var program = createProgramFromTags(
       'laserVertexShader',
       'laserFragmentShader');
@@ -693,7 +697,7 @@ function setupLightRay() {
   }
 
   var textures = {
-      colorMap: tdl.textures.loadTexture('assets/LightRay.png') };
+      colorMap: tdl.textures.loadTexture('../aquarium/assets/LightRay.png') };
   var program = createProgramFromTags(
       'texVertexShader',
       'texFragmentShader');
@@ -708,7 +712,7 @@ function setupLightRay() {
 }
 
 function setupBubbles(particleSystem) {
-    var texture = tdl.textures.loadTexture('static_assets/bubble.png');
+    var texture = tdl.textures.loadTexture('../aquarium/static_assets/bubble.png');
     var emitter = particleSystem.createParticleEmitter(texture.texture);
     emitter.setTranslation(0, 0, 0);
     emitter.setState(tdl.particles.ParticleStateIds.ADD);
@@ -856,6 +860,7 @@ function initialize() {
   Log("--Setup Laser----------------------------------------");
   var laser = setupLaser();
 
+  var num = [1, 100, 500, 1000, 5000, 10000, 15000, 20000, 25000, 30000];
   var changeViewElem = document.getElementById("setSettingChangeView");
   var parentElem = changeViewElem.parentNode;
   g_numFish.forEach((numFish, ndx) => {
@@ -880,6 +885,7 @@ function initialize() {
         if (!fishName.startsWith(type)) {
           return;
         }
+
         var numType = numLeft;
         if (type == "Big") {
           numType = Math.min(numLeft, totalFish < 100 ? 1 : 2);
@@ -903,7 +909,6 @@ function initialize() {
   setupBubbles(particleSystem);
   var bubbleTimer = 0;
   var bubbleIndex = 0;
-
   var lightRay = setupLightRay();
 
   var then = 0.0;
@@ -1141,7 +1146,36 @@ function initialize() {
     setCanvasSize(canvas, g.globals.width, g.globals.height);
   }
 
-  function render() {
+  function calculateViewMatrix(viewMatrix, q, v) {
+    // According to webvr 1.1 spec, orientation is a quaternion.
+    // 1. normalize orientation quaternion.
+    var normFactor = Math.sqrt(Math.pow(q[0], 2) + Math.pow(q[1], 2) + Math.pow(q[2], 2) + Math.pow(q[3], 2));
+    var b = q[0] / normFactor;
+    var c = q[1] / normFactor;
+    var d = q[2] / normFactor;
+    var a = q[3] / normFactor;
+
+    //2. calculate rotation matrix and combine transform vector to generate view matrix.
+    viewMatrix[0] = Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2) - Math.pow(d, 2);
+    viewMatrix[1] = 2 * b * c + 2 * a * d;
+    viewMatrix[2] = 2 * b * d - 2 * a * c;
+    viewMatrix[3] = 0;
+    viewMatrix[4] = 2 * b * c - 2 * a * d;
+    viewMatrix[5] = Math.pow(a, 2) - Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(d, 2);
+    viewMatrix[6] = 2 * c * d + 2 * a * b;
+    viewMatrix[7] = 0;
+    viewMatrix[8] = 2 * b * d + 2 * a * c;
+    viewMatrix[9] = 2 * c * d - 2 * a * b;
+    viewMatrix[10] = Math.pow(a, 2) - Math.pow(b, 2) - Math.pow(c, 2) + Math.pow(d, 2);
+    viewMatrix[11] = 0;
+    viewMatrix[12] = v[0];
+    viewMatrix[13] = v[1];
+    viewMatrix[14] = v[2];
+    viewMatrix[15] = 1;
+  }
+
+  function render(elapsedTime, projectionMatrix, pose) {
+    /*
     var now = theClock.getTime();
     var elapsedTime;
     if(then == 0.0) {
@@ -1155,6 +1189,7 @@ function initialize() {
 
     g_fpsTimer.update(elapsedTime);
     fpsElem.innerHTML = g_fpsTimer.averageFPS;
+    */
 
     // If we are running > 40hz then turn on a few more options.
     if (setPretty && g_fpsTimer.averageFPS > 40) {
@@ -1187,20 +1222,16 @@ function initialize() {
       clock += elapsedTime * g.globals.speed;
       eyeClock += elapsedTime * g.globals.eyeSpeed;
     }
-    eyePosition[0] = Math.sin(eyeClock) * g.globals.eyeRadius;
-    eyePosition[1] = g.globals.eyeHeight;
-    eyePosition[2] = Math.cos(eyeClock) * g.globals.eyeRadius;
-    target[0] = Math.sin(eyeClock + Math.PI) * g.globals.targetRadius;
-    target[1] = g.globals.targetHeight;
-    target[2] = Math.cos(eyeClock + Math.PI) * g.globals.targetRadius;
 
     ambient[0] = g.globals.ambientRed;
     ambient[1] = g.globals.ambientGreen;
     ambient[2] = g.globals.ambientBlue;
 
+    /*
     gl.colorMask(true, true, true, true);
     gl.clearColor(0,0.8,1,0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+    */
 
     var near = 1;
     var far = 25000;
@@ -1213,20 +1244,48 @@ function initialize() {
     var height = Math.abs(top - bottom);
     var xOff = width * g.net.offset[0] * g.net.offsetMult;
     var yOff = height * g.net.offset[1] * g.net.offsetMult;
-    fast.matrix4.frustum(
-      projection,
-      left + xOff,
-      right + xOff,
-      bottom + yOff,
-      top + yOff,
-      near,
-      far);
+    var uiMatrix = new Float32Array(16);
+    if (g_vrDisplay && g_vrDisplay.isPresenting && pose.position) {
+      // Using head-neck model in VR mode because of unclear distance measurement(vr return position using meters),
+      // user could see around but couldn't move around.
+      eyePosition[0] = g.globals.eyeRadius;
+      eyePosition[1] = g.globals.eyeHeight;
+      eyePosition[2] = g.globals.eyeRadius;
 
-    fast.matrix4.cameraLookAt(
+      fast.matrix4.copy(projection, projectionMatrix);
+      calculateViewMatrix(viewInverse, pose.orientation, eyePosition);
+
+      // Hard coded FPS translation vector and pin the whole UI in front of the user in VR mode. This hard coded position 
+      // vector used only once here.
+      calculateViewMatrix(uiMatrix, pose.orientation, [0, 0, 10]);
+      g_vrUi.render(projection, fast.matrix4.inverse(uiMatrix, uiMatrix), [pose.orientation]);
+    } else {
+      fast.matrix4.frustum(
+        projection,
+        left + xOff,
+        right + xOff,
+        bottom + yOff,
+        top + yOff,
+        near,
+        far);
+
+      eyePosition[0] = Math.sin(eyeClock) * g.globals.eyeRadius;
+      eyePosition[1] = g.globals.eyeHeight;
+      eyePosition[2] = Math.cos(eyeClock) * g.globals.eyeRadius;
+      target[0] = Math.sin(eyeClock + Math.PI) * g.globals.targetRadius;
+      target[1] = g.globals.targetHeight;
+      target[2] = Math.cos(eyeClock + Math.PI) * g.globals.targetRadius;
+
+      fast.matrix4.cameraLookAt(
         viewInverse,
         eyePosition,
         target,
         up);
+    }
+      var uiMatrix = new Float32Array(16);
+    //calculateViewMatrix(uiMatrix, pose.orientation, [0, 0, 10]);
+    //g_ui.render(projection, fast.matrix4.inverse(uiMatrix, fast.matrix4.translation(uiMatrix, [0, 0, 6])));
+    //var uiMatrix = new Float32Array(16);
     if (g.net.slave) {
       // compute X fov from y fov
       var fovy = math.degToRad(g.globals.fieldOfView * g.net.fovFudge);
@@ -1239,6 +1298,7 @@ function initialize() {
     fast.matrix4.inverse(view, viewInverse);
     fast.matrix4.mul(viewProjection, view, projection);
     fast.matrix4.inverse(viewProjectionInverse, viewProjection);
+    //g_ui.render(projection, fast.matrix4.inverse(uiMatrix, fast.matrix4.translation(uiMatrix, [0, 0, 16])));
 
     fast.matrix4.copy(skyView, view);
     skyView[12] = 0;
@@ -1619,19 +1679,112 @@ function initialize() {
       gl.depthMask(true);
     }
 
+    /*
     // Set the alpha to 255.
     gl.colorMask(false, false, false, true);
     gl.clearColor(0,0,0,1);
     gl.clear(gl.COLOR_BUFFER_BIT);
+    */
 
     // turn off logging after 1 frame.
     g_logGLCalls = false;
 
+    /*
     if (!g_drawOnce) {
       g_requestId = tdl.webgl.requestAnimationFrame(render, canvas);
     }
+    */
   }
-  render();
+
+  function onAnimationFrame() {
+    var now = theClock.getTime();
+    var elapsedTime;
+    if(then == 0.0) {
+      elapsedTime = 0.0;
+    } else {
+      elapsedTime = now - then;
+    }
+    then = now;
+
+    frameCount++;
+
+    g_fpsTimer.update(elapsedTime);
+    fpsElem.innerHTML = g_fpsTimer.averageFPS;
+    gl.colorMask(true, true, true, true);
+    gl.clearColor(0,0.8,1,0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+
+    if (g_vrDisplay) {
+      if (!g_drawOnce) {
+        g_requestId = g_vrDisplay.requestAnimationFrame(onAnimationFrame);
+      }
+      g_vrDisplay.getFrameData(g_frameData);
+      if (g_vrDisplay.isPresenting) {
+
+        /* VR UI is enabled in VR Mode. VR UI has two mode, menu mode is the mirror of control panel of 
+         * aquarium and non-menu mode may presents fps(could be turn off) in front of user. These two
+         * mode is controlled by isMenuMode flag and this flag is set by any keyboard event or gamepad
+         * button click.
+        */
+
+        // Set fps and prepare rendering it.
+        g_vrUi.setFps(g_fpsTimer.averageFPS);
+
+        // Query gamepad button clicked event. 
+        g_vrUi.queryGamepadStatus();
+
+        if (g_vrUi.isMenuMode) {
+
+          // When VR UI in menu mode, UI need a cursor to help user do select operation. Currently, cursor uses
+          // head-neck model which means a point in front of user and user could move the point by rotating their head(with HMD).
+          // A click event will be triggered when user stare at a label 2 seconds.
+          // TODO : add gamepad support to control cursor and trigger select event with VR controllers.
+
+          // Jquery selector description.
+          var selectorDescription;
+
+          // VR UI return whether there is an option been selected in VR mode.
+          var clickedLabel = g_vrUi.queryClickedLabel([0, 0, 0], g_frameData.pose.orientation);
+          if (clickedLabel != null) {
+            if (clickedLabel.isAdvancedSettings) {
+              selectorDescription = "#optionsContainer > div:contains(" + clickedLabel.name + ")";
+              $(selectorDescription).click();
+            } else if (clickedLabel.name == "options") {
+              $("#options").click();
+            } else {
+              selectorDescription = "#setSetting" + clickedLabel.name;
+              $(selectorDescription).click();
+            }
+          }
+        }
+      
+        gl.viewport(0, 0, canvas.width * 0.5, canvas.height);
+        render(elapsedTime, g_frameData.leftProjectionMatrix, g_frameData.pose);
+
+        gl.viewport(canvas.width * 0.5, 0, canvas.width * 0.5, canvas.height);
+        render(elapsedTime, g_frameData.rightProjectionMatrix, g_frameData.pose);
+
+        g_vrDisplay.submitFrame();
+      } else {
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        render(elapsedTime);
+      }
+    } else {
+      if (!g_drawOnce) {
+        g_requestId = tdl.webgl.requestAnimationFrame(onAnimationFrame, canvas);
+      }
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      render(elapsedTime);
+    }
+
+    // Set the alpha to 255.
+    gl.colorMask(false, false, false, true);
+    gl.clearColor(0,0,0,1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+  }
+
+  //render();
+  onAnimationFrame();
   return true;
 }
 
@@ -1772,4 +1925,184 @@ $(function(){
   main();
 });
 
+var VR = (function() {
+  "use strict";
+  var vrButton;
 
+  function getButtonContainer () {
+    var buttonContainer = document.getElementById("vr-button-container");
+    if (!buttonContainer) {
+      buttonContainer = document.createElement("div");
+      buttonContainer.id = "vr-button-container";
+      buttonContainer.style.fontFamily = "sans-serif";
+      buttonContainer.style.position = "absolute";
+      buttonContainer.style.zIndex = "999";
+      buttonContainer.style.left = "0";
+      buttonContainer.style.bottom = "0";
+      buttonContainer.style.right = "0";
+      buttonContainer.style.margin = "0";
+      buttonContainer.style.padding = "0";
+      buttonContainer.align = "right";
+      document.body.appendChild(buttonContainer);
+    }
+    return buttonContainer;
+  }
+
+  function addButtonElement (message, key, icon) {
+    var buttonElement = document.createElement("div");
+    buttonElement.classList.add = "vr-button";
+    buttonElement.style.color = "#FFF";
+    buttonElement.style.fontWeight = "bold";
+    buttonElement.style.backgroundColor = "#888";
+    buttonElement.style.borderRadius = "5px";
+    buttonElement.style.border = "3px solid #555";
+    buttonElement.style.position = "relative";
+    buttonElement.style.display = "inline-block";
+    buttonElement.style.margin = "0.5em";
+    buttonElement.style.padding = "0.75em";
+    buttonElement.style.cursor = "pointer";
+    buttonElement.align = "center";
+
+    if (icon) {
+      buttonElement.innerHTML = "<img src='" + icon + "'/><br/>" + message;
+    } else {
+      buttonElement.innerHTML = message;
+    }
+
+    if (key) {
+      var keyElement = document.createElement("span");
+      keyElement.classList.add = "vr-button-accelerator";
+      keyElement.style.fontSize = "0.75em";
+      keyElement.style.fontStyle = "italic";
+      keyElement.innerHTML = " (" + key + ")";
+
+      buttonElement.appendChild(keyElement);
+    }
+
+    getButtonContainer().appendChild(buttonElement);
+
+    return buttonElement;
+  }
+
+  function addButton (message, key, icon, callback) {
+    var keyListener = null;
+    if (key) {
+      var keyCode = key.charCodeAt(0);
+      keyListener = function (event) {
+        if (event.keyCode === keyCode) {
+          callback(event);
+        }
+      };
+      document.addEventListener("keydown", keyListener, false);
+    }
+    var element = addButtonElement(message, key, icon);
+    element.addEventListener("click", function (event) {
+      callback(event);
+      event.preventDefault();
+    }, false);
+
+    return {
+      element: element,
+      keyListener: keyListener
+    };
+  }
+
+  function removeButton (button) {
+    if (!button)
+      return;
+    if (button.element.parentElement)
+      button.element.parentElement.removeChild(button.element);
+    if (button.keyListener)
+      document.removeEventListener("keydown", button.keyListener, false);
+  }
+
+  function getCurrentUrl() {
+    var path = window.location.pathname;
+    return path.substring(0, path.lastIndexOf('/'));
+  }
+
+  function onPresentChange() {
+    // When we begin or end presenting, the canvas should be resized
+    // to the recommended dimensions for the display.
+    onResize();
+
+    if (g_vrDisplay.isPresenting) {
+      if (g_vrDisplay.capabilities.hasExternalDisplay) {
+        removeButton(vrButton);
+        vrButton = addButton("Exit VR", "E", getCurrentUrl() + "/vr_assets/button.png", onExitPresent);
+      }
+    } else {
+      if (g_vrDisplay.capabilities.hasExternalDisplay) {
+        removeButton(vrButton);
+        vrButton = addButton("Enter VR", "E", getCurrentUrl() + "/vr_assets/button.png", onRequestPresent);
+      }
+    }
+  }
+
+  function onRequestPresent() {
+    g_vrDisplay.requestPresent([{ source: canvas }]).then(function() {}, function() {
+      console.error("request present failed.");
+    });
+  }
+
+  function onExitPresent() {
+    if (!g_vrDisplay.isPresenting)
+      return;
+
+    g_vrDisplay.exitPresent().then(function() {}, function() {
+      console.error("exit present failed.");
+    });
+  }
+
+  function onResize() {
+    if (g_vrDisplay && g_vrDisplay.isPresenting) {
+      // If we're presenting we want to use the drawing buffer size
+      // recommended by the VRDisplay, since that will ensure the best
+      // results post-distortion.
+      var leftEye = g_vrDisplay.getEyeParameters("left");
+      var rightEye = g_vrDisplay.getEyeParameters("right");
+
+      canvas.width = Math.max(leftEye.renderWidth, rightEye.renderWidth) * 2;
+      canvas.height = Math.max(leftEye.renderHeight, rightEye.renderHeight);
+    } else {
+      // When we're not presenting, we want to change the size of the canvas
+      // to match the window dimensions.
+      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+    }
+  }
+
+  function init() {
+    if(navigator.getVRDisplays) {
+      g_frameData = new VRFrameData();
+
+      navigator.getVRDisplays().then(function(displays) {
+        if (displays.length > 0) {
+          g_vrDisplay = displays[0];
+          g_vrDisplay.depthNear = 0.1;
+          g_vrDisplay.depthFar = 1024.0;
+
+          if (g_vrDisplay.capabilities.canPresent) {
+            vrButton = addButton("Enter VR", "E", getCurrentUrl() + "/vr_assets/button.png", onRequestPresent);
+          }
+          g_vrUi = new Ui(gl, g_numFish);
+          g_vrUi.load("./vr_assets/ui/config.js");
+
+          window.addEventListener('vrdisplaypresentchange', onPresentChange, false);
+          window.addEventListener('vrdisplayactivate', onRequestPresent, false);
+          window.addEventListener('vrdisplaydeactivate', onExitPresent, false);
+          window.addEventListener('resize', function() {onResize();}, false);
+          window.addEventListener('keydown', function() { g_vrUi.isMenuMode = !g_vrUi.isMenuMode; }, false);
+        } else {
+          console.log("WebVR supported, but no VRDisplays found.")
+        }
+      });
+    } else if (navigator.getVRDevices) {
+      console.log("Your browser supports WebVR but not the latest version. See webvr.info for more info.");
+    } else {
+      console.log("Your browser does not support WebVR. See webvr.info for assistance");
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', init, false);
+})();
