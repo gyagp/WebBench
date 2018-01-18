@@ -37,6 +37,7 @@ var g_numFish = [1, 100, 500, 1000, 5000, 10000, 15000, 20000, 25000, 30000];
 var g_frameData;
 var g_vrDisplay;
 var g_vrUi;
+var g_polyfill = false;
 
 //g_debug = true;
 //g_drawOnce = true;
@@ -1245,7 +1246,7 @@ function initialize() {
     var xOff = width * g.net.offset[0] * g.net.offsetMult;
     var yOff = height * g.net.offset[1] * g.net.offsetMult;
     var uiMatrix = new Float32Array(16);
-    if (g_vrDisplay && g_vrDisplay.isPresenting && pose.position) {
+    if ((g_vrDisplay && g_vrDisplay.isPresenting && pose.position) || g_polyfill) {
       // Using head-neck model in VR mode because of unclear distance measurement(vr return position using meters),
       // user could see around but couldn't move around.
       eyePosition[0] = g.globals.eyeRadius;
@@ -1719,7 +1720,7 @@ function initialize() {
         g_requestId = g_vrDisplay.requestAnimationFrame(onAnimationFrame);
       }
       g_vrDisplay.getFrameData(g_frameData);
-      if (g_vrDisplay.isPresenting) {
+      if (g_vrDisplay.isPresenting || g_polyfill) {
 
         /* VR UI is enabled in VR Mode. VR UI has two mode, menu mode is the mirror of control panel of 
          * aquarium and non-menu mode may presents fps(could be turn off) in front of user. These two
@@ -1928,6 +1929,7 @@ $(function(){
 var VR = (function() {
   "use strict";
   var vrButton;
+  var pfButton;
 
   function getButtonContainer () {
     var buttonContainer = document.getElementById("vr-button-container");
@@ -2029,11 +2031,13 @@ var VR = (function() {
     if (g_vrDisplay.isPresenting) {
       if (g_vrDisplay.capabilities.hasExternalDisplay) {
         removeButton(vrButton);
+        if (pfButton) removeButton(pfButton);
         vrButton = addButton("Exit VR", "E", getCurrentUrl() + "/vr_assets/button.png", onExitPresent);
       }
     } else {
       if (g_vrDisplay.capabilities.hasExternalDisplay) {
         removeButton(vrButton);
+        pfButton = addButton("Enter Emulated VR", "P", getCurrentUrl() + "/vr_assets/button.png", onEnablePolyFill);
         vrButton = addButton("Enter VR", "E", getCurrentUrl() + "/vr_assets/button.png", onRequestPresent);
       }
     }
@@ -2072,7 +2076,24 @@ var VR = (function() {
     }
   }
 
+  function onEnablePolyFill() {
+      InitializeWebVRPolyfill();
+      console.log("PolyFill enabled.");
+      removeButton(pfButton);
+      if (vrButton) removeButton(vrButton);
+      pfButton = addButton("Exit Emulated VR", "P", "/vr/button.png", onDisablePolyFill);
+      g_polyfill = true;
+      init();
+  }
+
+  function onDisablePolyFill() {
+      window.location.reload(true);
+  }
+
   function init() {
+    if (!g_polyfill) {
+      pfButton = addButton("Enter Emulated VR", "P", getCurrentUrl() + "/vr_assets/button.png", onEnablePolyFill);
+    }
     if(navigator.getVRDisplays) {
       g_frameData = new VRFrameData();
 
@@ -2082,7 +2103,7 @@ var VR = (function() {
           g_vrDisplay.depthNear = 0.1;
           g_vrDisplay.depthFar = 1024.0;
 
-          if (g_vrDisplay.capabilities.canPresent) {
+          if (g_vrDisplay.capabilities.canPresent && !g_polyfill) {
             vrButton = addButton("Enter VR", "E", getCurrentUrl() + "/vr_assets/button.png", onRequestPresent);
           }
           g_vrUi = new Ui(gl, g_numFish);
