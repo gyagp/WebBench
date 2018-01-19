@@ -2032,7 +2032,7 @@ var VR = (function() {
       if (g_vrDisplay.capabilities.hasExternalDisplay) {
         removeButton(vrButton);
         if (pfButton) removeButton(pfButton);
-        vrButton = addButton("Exit VR", "E", getCurrentUrl() + "/vr_assets/button.png", onExitPresent);
+        vrButton = addButton("Exit HMD", "E", getCurrentUrl() + "/vr_assets/button.png", onExitPresent);
       }
     } else {
       if (g_vrDisplay.capabilities.hasExternalDisplay) {
@@ -2081,7 +2081,7 @@ var VR = (function() {
       console.log("PolyFill enabled.");
       removeButton(pfButton);
       if (vrButton) removeButton(vrButton);
-      pfButton = addButton("Exit Emulated VR", "P", getCurrentUrl() + "/vr_assets/button.png", onDisablePolyFill);
+      pfButton = addButton("Exit Polyfill", "P", getCurrentUrl() + "/vr_assets/button.png", onDisablePolyFill);
       g_polyfill = true;
       init();
   }
@@ -2092,7 +2092,7 @@ var VR = (function() {
 
   function init() {
     if (!g_polyfill) {
-      pfButton = addButton("Enter Emulated VR", "P", getCurrentUrl() + "/vr_assets/button.png", onEnablePolyFill);
+      pfButton = addButton("Enter Polyfill", "P", getCurrentUrl() + "/vr_assets/button.png", onEnablePolyFill);
     }
     if(navigator.getVRDisplays) {
       g_frameData = new VRFrameData();
@@ -2104,7 +2104,7 @@ var VR = (function() {
           g_vrDisplay.depthFar = 1024.0;
 
           if (g_vrDisplay.capabilities.canPresent && !g_polyfill) {
-            vrButton = addButton("Enter VR", "E", getCurrentUrl() + "/vr_assets/button.png", onRequestPresent);
+            vrButton = addButton("Enter HMD", "E", getCurrentUrl() + "/vr_assets/button.png", onRequestPresent);
           }
           g_vrUi = new Ui(gl, g_numFish);
           g_vrUi.load("./vr_assets/ui/config.js");
