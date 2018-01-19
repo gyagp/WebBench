@@ -27,7 +27,7 @@
   <button onclick="load8k_vp9_60fps()">8k-vp9-60fps</button>
 </div>
 <div style="text-align:center"> 
-  <video id="video1" width="420" src="./media/textures/pano_vp9_1920X1080_60fps.webm"  loop>
+  <video id="video1" width="420" src="./media/textures/vp9_1920X1080_60fps.webm"  loop>
     Your browser does not support HTML5 video.
   </video>
 </div> 
@@ -47,44 +47,44 @@ function makeFS() {
 } 
 
 function load4k() { 
-    myVideo.src = './media/textures/gear360_driving_h264_3840X2160_60fps.mp4';
+    myVideo.src = './media/textures/h264_3840X2160_60fps.mp4';
     //myVideo.type = 'video/mp4';
 } 
 
 function load1080p_h264_60fps() { 
-    myVideo.src = './media/textures/gear360_driving_h264_1920X1080_60fps.mp4';
+    myVideo.src = './media/textures/h264_1920X1080_60fps.mp4';
     //myVideo.type = 'video/mp4';
 } 
 function load8k() { 
-    myVideo.src = './media/textures/gear360_driving_h264_7680X4320_60fps.mp4'; 
+    myVideo.src = './media/textures/h264_7680X4320_60fps.mp4'; 
     //myVideo.type = 'video/mp4';
 } 
 function load8k_30fps() { 
-    myVideo.src = './media/textures/gear360_driving_h264_7680X4320_30fps.mp4'; 
+    myVideo.src = './media/textures/h264_7680X4320_30fps.mp4'; 
     //myVideo.type = 'video/mp4';
 } 
 function load1080p_vp9_60fps() { 
-    myVideo.src = './media/textures/pano_vp9_1920X1080_60fps.webm';
+    myVideo.src = './media/textures/vp9_1920X1080_60fps.webm';
     //myVideo.type = 'video/webm';
 } 
 function load4k_vp9_60fps() { 
-    myVideo.src = './media/textures/pano_vp9_3840X2160_60fps.webm';
+    myVideo.src = './media/textures/vp9_3840X2160_60fps.webm';
     //myVideo.type = 'video/webm';
 } 
 function load8k_vp9_60fps() { 
-    myVideo.src = './media/textures/pano_vp9_7680X4320_60fps.webm';
+    myVideo.src = './media/textures/vp9_7680X4320_60fps.webm';
     //myVideo.type = 'video/webm';
 } 
 function load1080p_vp8_60fps() { 
-    myVideo.src = './media/textures/pano_vp8_1920X1080_60fps.webm';
+    myVideo.src = './media/textures/vp8_1920X1080_60fps.webm';
     //myVideo.type = 'video/webm';
 } 
 function load4k_vp8_60fps() { 
-    myVideo.src = './media/textures/pano_vp8_3840X2160_60fps.webm';
+    myVideo.src = './media/textures/vp8_3840X2160_60fps.webm';
     //myVideo.type = 'video/webm';
 } 
 function load8k_vp8_60fps() { 
-    myVideo.src = './media/textures/pano_vp8_7680X4320_60fps.webm';
+    myVideo.src = './media/textures/vp8_7680X4320_60fps.webm';
     //myVideo.type = 'video/webm';
 } 
 
@@ -122,18 +122,6 @@ document.addEventListener("VideoFPSReport",
 </script> 
 
 <p>Video play performance testing with "video" element.</p>
-<p>Steps:</p>
-<ol type="1">
-<li>Download <a href='https://developer.microsoft.com/en-us/windows/hardware/windows-assessment-deployment-kit'>Windows ADK</a> and install.</li>
-<li>Launch “Windows Performance Recorder” (WPR)</li>
-<li>Select the profile “GPU Activity” under Resource Analysis.</li>
-<li>Change the logging mode to “file” and detail level to “verbose”.</li>
-<li>Play the video in Chrome and click “Start” in WPR to begin recording</li>
-<li>Click “stop” when enough time passes. This will create a trace file (ETL).</li>
-<li>Open the ETL in gpuview.exe (it’s under the same directory as WPR)</li>
-<li>In gpuview, click "Charts" -> "Toggle Present Charts". (HotKey Ctrl+F6) </li>
-<li>The FPS is shown under the chrome.exe for chrome.</li>
-</ol>
 
 </body> 
 </html>
