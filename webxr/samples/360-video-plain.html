@@ -1,0 +1,13 @@
+<body/>
+
+<script src="js/third-party/wglu/wglu-url.js"></script>
+<script>
+  var video = document.createElement('video');
+  video.src = WGLUUrl.getString("videoUrl");
+  //video.controls = true;
+  video.loop = true;
+  video.autoplay = true;
+  video.width = screen.width;
+  video.height = screen.height;
+  document.body.appendChild(video);
+</script>
