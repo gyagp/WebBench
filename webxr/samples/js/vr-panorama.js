@@ -167,6 +167,7 @@ window.VRPanorama = (function () {
       video.src = url;
       var btn = document.createElement("BUTTON");
       var t = document.createTextNode("CLICK ME");
+      btn.id = "play-button";
       btn.style.position = "absolute";
       btn.style.zIndex = "999";
       btn.style.left = "80";
