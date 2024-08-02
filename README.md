@@ -6,6 +6,51 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
 <table>
   <th>Category</th><th>Name</th><th>Version</th><th>Metric</th><th>Description</th><th>External Link</th><th>Internal Link</th>
   <tr>
+    <td>WebGL</td>
+    <td>Forest</td>
+    <td>NA</td>
+    <td>FPS(+)</td>
+    <td>Babylon.js Forest WebGL</td>
+    <td>https://www.babylonjs.com/Demos/WebGPU/forestWebGL.html</td>
+    <td>https://webatintel.github.io/webbench/build/Demos/WebGPU/forestWebGL.html</td>
+  </tr>
+  <tr>
+    <td>WebGPU</td>
+    <td>Forest</td>
+    <td>NA</td>
+    <td>FPS(+)</td>
+    <td>Babylon.js Forest WebGPU</td>
+    <td>https://www.babylonjs.com/Demos/WebGPU/forestWebGPU.html</td>
+    <td>https://webatintel.github.io/webbench-babylonjs-website/build/Demos/WebGPU/forestWebGPU.html</td>
+  </tr>
+    <tr>
+    <td>WebGL</td>
+    <td>BoatAttack</td>
+    <td>NA</td>
+    <td>FPS(+)</td>
+    <td>Unity BoatAttack WebGL</td>
+    <td>NA</td>
+    <td>https://webatintel.github.io/webbench/boatattack/webgl-unity (need local setup)</td>
+  </tr>
+  <tr>
+    <td>WebGPU</td>
+    <td>BoatAttack</td>
+    <td>NA</td>
+    <td>FPS(+)</td>
+    <td>Unity BoatAttack WebGPU</td>
+    <td>https://boatattack-webgpu-updates-branch-a7.netlify.app</td>
+    <td>https://webatintel.github.io/webbench/boatattack/webgpu-unity (need local setup)</td>
+  </tr>
+  <tr>
+    <td>WebGL</td>
+    <td>Aquarium</td>
+    <td>NA</td>
+    <td>FPS(+)</td>
+    <td>Aquarium</td>
+    <td>https://webglsamples.org/aquarium/aquarium.html</td>
+    <td>https://webatintel.github.io/webbench/webglsamples/aquarium/aquarium.html</td>
+  </tr>
+  <tr>
     <td>JS</td>
     <td>SunSpider</td>
     <td>1.0</td>
@@ -31,7 +76,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>From WebKit to test the core JS language only, and not other browser APIs</td>
     <td>http://www.webkit.org/perf/sunspider-0.9/sunspider-driver.html</td>
     <td>SunSpider/sunspider-0.9/sunspider-driver.html</td>
-  </tr>  
+  </tr>
   <tr>
     <td>JS</td>
     <td>V8 Benchmark Suite</td>
@@ -157,7 +202,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>From MindCat</td>
     <td>http://flashcanvas.net/examples/dl.dropbox.com/u/1865210/mindcat/canvas_perf.html</td>
     <td>canvas-perf/index.html</td>
-  </tr>  
+  </tr>
   <tr>
     <td>Comprehensive</td>
     <td>Peacekeeper</td>
@@ -175,7 +220,7 @@ Collect famous web benchmarks so that they could be run locally. Currently we su
     <td>Benchmark from Futuremark, which needs to set up a server for it.</td>
     <td>http://peacekeeper.futuremark.com/run.action</td>
     <td>Peacekeeper/peacekeeper2/index.html</td>
-  </tr>  
+  </tr>
   <tr>
     <td>Comprehensive</td>
     <td>Browsermark</td>
