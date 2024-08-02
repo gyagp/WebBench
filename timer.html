@@ -1,0 +1,205 @@
+<html>
+
+<body>
+  <script type='text/javascript'>
+    'use strict';
+    let count;
+    let startTime;
+    let endTime;
+
+    let result = document.createElement('div');
+    result.width = screen.width;
+    result.height = screen.height;
+    document.body.appendChild(result);
+
+    // window.postMessage
+    (function () {
+      let fns = [];
+      let messageName = 'message';
+
+      function setTimeoutWPM(fn, timeout = -1) {
+        fns.push(fn);
+        if (timeout == -1) {
+          window.postMessage(messageName, '*');
+        } else {
+          setTimeout(() => {
+            window.postMessage(messageName, '*');
+          }, timeout);
+        }
+      }
+
+      function _handleMessage(event) {
+        if (event.source == window && event.data == messageName) {
+          event.stopPropagation();
+          if (fns.length > 0) {
+            let fn = fns.shift();
+            fn();
+          }
+        }
+      }
+      window.addEventListener('message', _handleMessage, true);
+      window.setTimeoutWPM = setTimeoutWPM;
+    })();
+
+    // MessagePort.postMessage
+    (function () {
+      let fns = [];
+      let messageName = 'message';
+      let channel = new MessageChannel();
+
+      function setTimeoutMPPM(fn) {
+        fns.push(fn);
+        channel.port2.postMessage(messageName);
+      }
+
+      channel.port1.onmessage = function (event) {
+        if (event.data == messageName) {
+          event.stopPropagation();
+          if (fns.length > 0) {
+            let fn = fns.shift();
+            fn();
+          }
+        }
+      }
+
+      channel.port1.start();
+      channel.port2.start();
+      window.setTimeoutMPPM = setTimeoutMPPM;
+    })();
+
+    let maxCount;
+    if (getParamByName('maxCount')) {
+      maxCount = getParamByName('maxCount');
+    } else {
+      maxCount = 30;
+    }
+
+    let test = getParamByName('test');
+    let timeout = getParamByName('timeout');
+    if (test == 'setTimeout') {
+      testSetTimeout();
+    } else if (test == 'setInterval') {
+      testSetInterval();
+    } else if (test == 'setTimeoutWPM') {
+      testSetTimeoutWPM(timeout);
+    } else if (test == 'setTimeoutMPPM') {
+      testSetTimeoutMPPM();
+    } else if (test == 'requestIdleCallback') {
+      testRequestIdleCallback();
+    }
+
+    function printLine(str) {
+      result.innerText += str + ' \n';
+    }
+
+    function printTime() {
+      printLine(Math.round((endTime - startTime) * 100) / 100 + ' ms');
+    }
+
+    function getParamByName(name) {
+      let url = window.location.href;
+      name = name.replace(/[\[\]]/g, '\\$&');
+      let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)', 'i');
+      let match = regex.exec(url);
+      if (!match)
+        return null;
+      if (!match[2])
+        return '';
+      return decodeURIComponent(match[2].replace(/\+/g, ' '));
+    }
+
+    function testSetTimeout() {
+      count = 0;
+      printLine('=setTimeout Test=');
+      startTime = performance.now();
+      setTimeout(_testSetTimeout, 0);
+
+      function _testSetTimeout() {
+        endTime = performance.now();
+        printTime();
+        count++;
+        if (count > maxCount) {
+          return;
+        }
+        startTime = performance.now();
+        setTimeout(_testSetTimeout, 0);
+      }
+    }
+
+    function testSetInterval() {
+      count = 0;
+      printLine('=setInterval Test=');
+      startTime = performance.now();
+      let id = setInterval(_testSetInterval, 0);
+
+      function _testSetInterval() {
+        endTime = performance.now();
+        printTime();
+        count++;
+        if (count > maxCount) {
+          clearInterval(id);
+        }
+        startTime = performance.now();
+      }
+    }
+
+    function testSetTimeoutWPM(timeout = -1) {
+      count = 0;
+      printLine('=setTimeoutWPM Test=');
+
+      startTime = performance.now();
+      setTimeoutWPM(_testSetTimeoutWPM, timeout);
+
+      function _testSetTimeoutWPM() {
+        endTime = performance.now();
+        printTime();
+        count++;
+        if (count > maxCount) {
+          return;
+        }
+        startTime = performance.now();
+        setTimeoutWPM(_testSetTimeoutWPM, timeout);
+      }
+    }
+
+    function testSetTimeoutMPPM() {
+      count = 0;
+      printLine('=setTimeoutMPPM Test=');
+
+      startTime = performance.now();
+      setTimeoutMPPM(_testSetTimeoutMPPM, 0);
+
+      function _testSetTimeoutMPPM() {
+        endTime = performance.now();
+        printTime();
+        count++;
+        if (count > maxCount) {
+          return;
+        }
+        startTime = performance.now();
+        setTimeoutMPPM(_testSetTimeoutMPPM, 0);
+      }
+    }
+
+    function testRequestIdleCallback() {
+      count = 0;
+      printLine('=requestIdleCallback Test=');
+
+      startTime = performance.now();
+      requestIdleCallback(_testRequestIdleCallback);
+
+      function _testRequestIdleCallback() {
+        endTime = performance.now();
+        printTime();
+        count++;
+        if (count > maxCount) {
+          return;
+        }
+        startTime = performance.now();
+        requestIdleCallback(_testRequestIdleCallback);
+      }
+    }
+  </script>
+</body>
+
+</html>
