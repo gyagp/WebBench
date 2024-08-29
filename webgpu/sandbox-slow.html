@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8" />
+  <meta charset="utf-8" />
 </head>
+
 <body onload="main()">
-<canvas id="webgpu-canvas" width="16" height="16"></canvas>
+  <canvas id="webgpu-canvas" width="16" height="16"></canvas>
 </body>
 <script type="application/javascript">
-async function main() {
+  async function main() {
     var canvas = document.getElementById("webgpu-canvas");
 
     var adapter = await navigator.gpu.requestAdapter();
     var device = await adapter.requestDevice({
-        requiredFeatures: ["timestamp-query"],
+      requiredFeatures: ["timestamp-query"],
     });
     var queue = device.queue;
 
@@ -145,18 +147,18 @@ fn main(
 }
  `;
     const shaderModule = device.createShaderModule({
-        code: shader,
+      code: shader,
     });
     const pipeline = device.createComputePipeline({
-        layout: 'auto',
-        compute: {
-            module: shaderModule,
-        }
+      layout: 'auto',
+      compute: {
+        module: shaderModule,
+      }
     });
     const uniformBuffer = device.createBuffer({
-        size: 256,
-        usage: GPUBufferUsage.UNIFORM,
-        mappedAtCreation: true,
+      size: 256,
+      usage: GPUBufferUsage.UNIFORM,
+      mappedAtCreation: true,
     });
     const uniformData = new Uint32Array(uniformBuffer.getMappedRange());
     uniformData[0] = 1;
@@ -170,89 +172,89 @@ fn main(
     uniformBuffer.unmap();
 
     const dstTensor = device.createTexture({
-        size: [kSharedDim, kDstDim / 4, 1],
-        format: "rgba32float",
-        usage: GPUTextureUsage.STORAGE_BINDING,
+      size: [kSharedDim, kDstDim / 4, 1],
+      format: "rgba32float",
+      usage: GPUTextureUsage.STORAGE_BINDING,
     });
     const srcTensor = device.createTexture({
-        size: [kSharedDim, kSrcDim / 4, 1],
-        format: "rgba32float",
-        usage: GPUTextureUsage.TEXTURE_BINDING,
+      size: [kSharedDim, kSrcDim / 4, 1],
+      format: "rgba32float",
+      usage: GPUTextureUsage.TEXTURE_BINDING,
     });
 
     const biasTensor = device.createBuffer({
-        size: kDstDim * 4,
-        usage: GPUBufferUsage.STORAGE,
+      size: kDstDim * 4,
+      usage: GPUBufferUsage.STORAGE,
     });
 
     const wightsTensor = device.createBuffer({
-        size: kDstDim * kSrcDim * 4,
-        usage: GPUBufferUsage.STORAGE,
+      size: kDstDim * kSrcDim * 4,
+      usage: GPUBufferUsage.STORAGE,
     });
 
     const bindGroup = device.createBindGroup({
-        layout: pipeline.getBindGroupLayout(0),
-        entries: [
-            {
-                binding: 0,
-                resource: dstTensor.createView(),
-            },
-            {
-                binding: 1,
-                resource: srcTensor.createView(),
-            },
-            {
-                binding: 2,
-                resource: {
-                    buffer: biasTensor,
-                    size: kDstDim * 4,
-                },
-            },
-            {
-                binding: 3,
-                resource: {
-                    buffer: wightsTensor,
-                    size:  kDstDim * kSrcDim * 4,
-                },
-            },
-            {
-                binding: 4,
-                resource: {
-                    buffer:  uniformBuffer,
-                    size: 32,
-                },
-            }
-        ],
+      layout: pipeline.getBindGroupLayout(0),
+      entries: [
+        {
+          binding: 0,
+          resource: dstTensor.createView(),
+        },
+        {
+          binding: 1,
+          resource: srcTensor.createView(),
+        },
+        {
+          binding: 2,
+          resource: {
+            buffer: biasTensor,
+            size: kDstDim * 4,
+          },
+        },
+        {
+          binding: 3,
+          resource: {
+            buffer: wightsTensor,
+            size: kDstDim * kSrcDim * 4,
+          },
+        },
+        {
+          binding: 4,
+          resource: {
+            buffer: uniformBuffer,
+            size: 32,
+          },
+        }
+      ],
     });
 
     const querySet = device.createQuerySet({
-        type: "timestamp",
-        count: kTrials * 2,
+      type: "timestamp",
+      count: kTrials * 2,
     });
     const querySetResults = device.createBuffer({
-        usage: GPUBufferUsage.QUERY_RESOLVE | GPUBufferUsage.COPY_SRC,
-        size: 8 * 2 * kTrials,
+      usage: GPUBufferUsage.QUERY_RESOLVE | GPUBufferUsage.COPY_SRC,
+      size: 8 * 2 * kTrials,
     });
     const querySetReadback = device.createBuffer({
-        usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST,
-        size: 8 * 2 * kTrials,
+      usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST,
+      size: 8 * 2 * kTrials,
     });
 
     const encoder = device.createCommandEncoder();
     for (var i = 0; i < kTrials; ++i) {
-        const pass = encoder.beginComputePass({
-            timestampWrites: {
-                querySet,
-                beginningOfPassWriteIndex: 2 * i,
-                endOfPassWriteIndex: 2 * i + 1,
-            }
-        });
-        pass.setPipeline(pipeline);
-        pass.setBindGroup(0, bindGroup);
-        for (var j = 0; j < kDispatchesPerTrial; ++j) {
-            pass.dispatchWorkgroups(kSharedDim / 64, kDstDim / 4 / 4, 1);
+      const pass = encoder.beginComputePass({
+        timestampWrites: {
+          querySet,
+          beginningOfPassWriteIndex: 2 * i,
+          endOfPassWriteIndex: 2 * i + 1,
         }
-        pass.end();
+      });
+      pass.setPipeline(pipeline);
+      pass.setBindGroup(0, bindGroup);
+      for (var j = 0; j < kDispatchesPerTrial; ++j) {
+        pass.dispatchWorkgroups(kSharedDim / 64, kDstDim / 4 / 4, 1);
+      }
+      pass.end();
     }
     encoder.resolveQuerySet(querySet, 0, 2 * kTrials, querySetResults, 0);
     encoder.copyBufferToBuffer(querySetResults, 0, querySetReadback, 0, 8 * 2 * kTrials);
@@ -260,13 +262,14 @@ fn main(
     queue.submit([commandBuffer]);
 
     await querySetReadback.mapAsync(GPUMapMode.READ);
-   
+
     const timestamps = new BigInt64Array(querySetReadback.getMappedRange());
     for (var i = 0; i < kTrials; ++i) {
-        const duaration = (timestamps[2 * i + 1] - timestamps[2 * i]);
-        console.log(duaration);
+      const duaration = (timestamps[2 * i + 1] - timestamps[2 * i]);
+      console.log(duaration);
     }
     //console.log("avg:" + avg + " max: " + max + " min: " + min);
-}
+  }
 </script>
+
 </html>
