@@ -1,0 +1,199 @@
+<body onload="main()">
+  <span id="time"></span>
+</body>
+<script type="application/javascript">
+  "use strict";
+
+  const count = getParam("count", "Number", 500);
+  const way = getParam("way", "String", "0");
+  const minSizePower = 4; // 2^minSizePower
+  const maxSizePower = 23; // 2^maxSizePower
+  const arrayBuffer = new ArrayBuffer(Math.pow(2, maxSizePower));
+
+  let device;
+
+  function getFunctionName() {
+    const stack = new Error().stack?.split(/\r\n|\r|\n/g) || [];
+    return stack[2].trimStart().split(' ')[1];
+  }
+
+  function getParam(name, type, _default) {
+    name = name.replace(/[\[\]]/g, "\\$&");
+    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i");
+    let results = regex.exec(window.location.href);
+    if (!results || !results[2]) return _default;
+
+    const result = decodeURIComponent(results[2].replace(/\+/g, " "));
+    if (type === "Boolean") {
+      if (result === "true") {
+        return true;
+      } else if (result === "false") {
+        return false;
+      }
+    } else if (type === "Number") {
+      return parseInt(result);
+    } else {
+      return result;
+    }
+  }
+
+  function getSize(index) {
+    return Math.pow(2, minSizePower + index % (maxSizePower - minSizePower + 1));
+  }
+
+  async function way0() {
+  }
+
+  async function way1() {
+    console.log(`${getFunctionName()}: w/ storageBuffer (mapptedAtCreation: true), w/o stagingBuffer`);
+
+    for (let i = 0; i < count; i++) {
+      const size = getSize(i);
+      const storageBuffer = device.createBuffer({
+        size: size,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
+        mappedAtCreation: true,
+      });
+      const stagingArrayBuffer = storageBuffer.getMappedRange();
+      new Uint8Array(stagingArrayBuffer).set(new Uint8Array(arrayBuffer, 0, size));
+      storageBuffer.unmap();
+    }
+  }
+
+  async function way2() {
+    console.log(`${getFunctionName()}: w/ storageBuffer, w/o stagingBuffer, writeBuffer, frequent queue.submit`);
+
+    for (let i = 0; i < count; i++) {
+      const size = getSize(i);
+      const storageBuffer = device.createBuffer({
+        size: size,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
+      });
+      device.queue.writeBuffer(storageBuffer, 0, arrayBuffer, 0, size);
+      device.queue.submit([]);
+    }
+    await device.queue.onSubmittedWorkDone();
+  }
+
+  async function way3() {
+    console.log(`${getFunctionName()}: w/ storageBuffer, w/o stagingBuffer, writeBuffer, single queue.submit`);
+
+    for (let i = 0; i < count; i++) {
+      const size = getSize(i);
+      const storageBuffer = device.createBuffer({
+        size: size,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
+      });
+      device.queue.writeBuffer(storageBuffer, 0, arrayBuffer, 0, size);
+    }
+    device.queue.submit([]);
+    await device.queue.onSubmittedWorkDone();
+  }
+
+  async function way4() {
+    console.log(`${getFunctionName()}: w/ storageBuffer, w/ stagingBuffer (mapptedAtCreation: true, w/o pool), frequent queue.submit`);
+
+    for (let i = 0; i < count; i++) {
+      const size = getSize(i);
+      const storageBuffer = device.createBuffer({
+        size: size,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
+      });
+      const stagingBuffer = device.createBuffer({
+        size: size,
+        usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
+        mappedAtCreation: true,
+      });
+      const stagingArrayBuffer = stagingBuffer.getMappedRange();
+      new Uint8Array(stagingArrayBuffer).set(new Uint8Array(arrayBuffer, 0, size));
+      stagingBuffer.unmap();
+
+      const commandEncoder = device.createCommandEncoder();
+      commandEncoder.copyBufferToBuffer(stagingBuffer, 0, storageBuffer, 0, size);
+      device.queue.submit([commandEncoder.finish()]);
+      stagingBuffer.destroy();
+    }
+    await device.queue.onSubmittedWorkDone();
+  }
+
+  async function way5() {
+    console.log(`${getFunctionName()}: w/ storageBuffer, w/ stagingBuffer (mapptedAtCreation: true, w/ pool), frequent queue.submit`);
+
+    const stagingBufferPool = [];
+    let stagingBuffer;
+
+    for (let i = 0; i < count; i++) {
+      const size = getSize(i);
+      const storageBuffer = device.createBuffer({
+        size: size,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
+      });
+
+      if (stagingBufferPool.length) {
+        console.log('stagingBuffer is reused');
+        stagingBuffer = stagingBufferPool.pop();
+      } else {
+        stagingBuffer = device.createBuffer({
+          size: size,
+          usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
+          mappedAtCreation: true,
+        });
+      }
+
+      const stagingArrayBuffer = stagingBuffer.getMappedRange();
+      new Uint8Array(stagingArrayBuffer).set(new Uint8Array(arrayBuffer, 0, size));
+      stagingBuffer.unmap();
+
+      const commandEncoder = device.createCommandEncoder();
+      commandEncoder.copyBufferToBuffer(stagingBuffer, 0, storageBuffer, 0, size);
+      device.queue.submit([commandEncoder.finish()]);
+      stagingBuffer.mapAsync(GPUMapMode.WRITE).then(() => {
+        stagingBufferPool.push(stagingBuffer);
+      });
+    }
+    await device.queue.onSubmittedWorkDone();
+  }
+
+  async function way6() {
+    console.log(`${getFunctionName()}: w/ storageBuffer, w/ stagingBuffer (mapptedAtCreation: true, w/o pool), single queue.submit`);
+
+    const stagingBufferPool = [];
+    let stagingBuffer;
+
+    for (let i = 0; i < count; i++) {
+      const size = getSize(i);
+      const storageBuffer = device.createBuffer({
+        size: size,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
+      });
+
+      if (stagingBufferPool.length) {
+        stagingBuffer = stagingBufferPool.pop();
+      } else {
+        stagingBuffer = device.createBuffer({
+          size: size,
+          usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
+          mappedAtCreation: true,
+        });
+      }
+
+      const stagingArrayBuffer = stagingBuffer.getMappedRange();
+      new Uint8Array(stagingArrayBuffer).set(new Uint8Array(arrayBuffer, 0, size));
+      stagingBuffer.unmap();
+
+      const commandEncoder = device.createCommandEncoder();
+      commandEncoder.copyBufferToBuffer(stagingBuffer, 0, storageBuffer, 0, size);
+    }
+    device.queue.submit([commandEncoder.finish()]);
+    await device.queue.onSubmittedWorkDone();
+  }
+
+  async function main() {
+    const adapter = await navigator.gpu.requestAdapter();
+    device = await adapter.requestDevice();
+    const startTime = performance.now();
+    eval(await `way${way}();`);
+    const elapsedTime = parseFloat((performance.now() - startTime).toFixed(2));
+    document.getElementById("time").textContent = `Time: ${elapsedTime} ms`;
+  }
+</script>
