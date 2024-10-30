@@ -57,6 +57,7 @@
       const stagingArrayBuffer = storageBuffer.getMappedRange();
       new Uint8Array(stagingArrayBuffer).set(new Uint8Array(arrayBuffer, 0, size));
       storageBuffer.unmap();
+      device.queue.submit([]);
     }
   }
 
@@ -185,6 +186,61 @@
       commandEncoder.copyBufferToBuffer(stagingBuffer, 0, storageBuffer, 0, size);
     }
     device.queue.submit([commandEncoder.finish()]);
+    await device.queue.onSubmittedWorkDone();
+  }
+
+  async function way7() {
+    console.log(`${getFunctionName()}: w/ storageBuffer, w/ large stagingBuffer (mapptedAtCreation: true), batched queue.submit`);
+
+    const stagingBufferPool = [];
+    const stagingBufferSize = Math.pow(2, 25);
+
+    // create a new stagingBuffer
+    let stagingBuffer = device.createBuffer({
+      size: stagingBufferSize,
+      usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
+      mappedAtCreation: true,
+    });
+    let stagingArrayBuffer = stagingBuffer.getMappedRange();
+    let stagingBufferLeftSize = stagingBufferSize;
+    let commandEncoder = device.createCommandEncoder();
+
+    for (let i = 0; i < count; i++) {
+      const size = getSize(i);
+      const storageBuffer = device.createBuffer({
+        size: size,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
+      });
+
+      if (size > stagingBufferLeftSize) {
+        // finish the old stagingBuffer
+        stagingBuffer.unmap();
+        device.queue.submit([commandEncoder.finish()]);
+        stagingBuffer.destroy();
+
+        // create a new stagingBuffer
+        stagingBuffer = device.createBuffer({
+          size: stagingBufferSize,
+          usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
+          mappedAtCreation: true,
+        });
+        stagingArrayBuffer = stagingBuffer.getMappedRange();
+        stagingBufferLeftSize = stagingBufferSize;
+        commandEncoder = device.createCommandEncoder();
+      }
+
+      new Uint8Array(stagingArrayBuffer).set(new Uint8Array(arrayBuffer, 0, size), stagingBufferSize - stagingBufferLeftSize);
+      commandEncoder.copyBufferToBuffer(stagingBuffer, stagingBufferSize - stagingBufferLeftSize, storageBuffer, 0, size);
+      stagingBufferLeftSize -= size;
+    }
+
+    if (stagingBufferLeftSize < stagingBufferSize) {
+      // finish the last stagingBuffer
+      stagingBuffer.unmap();
+      device.queue.submit([commandEncoder.finish()]);
+      stagingBuffer.destroy();
+    }
+
     await device.queue.onSubmittedWorkDone();
   }
 
