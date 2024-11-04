@@ -9,8 +9,19 @@
   const minSizePower = 4; // 2^minSizePower
   const maxSizePower = 23; // 2^maxSizePower
   const arrayBuffer = new ArrayBuffer(Math.pow(2, maxSizePower));
+  const storageBuffers = [];
 
   let device;
+
+  function createStorageBuffer(size, mappedAtCreation = false) {
+    const storageBuffer = device.createBuffer({
+      size: size,
+      usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
+      mappedAtCreation: mappedAtCreation,
+    });
+    storageBuffers.push(storageBuffer);
+    return storageBuffer;
+  }
 
   function getFunctionName() {
     const stack = new Error().stack?.split(/\r\n|\r|\n/g) || [];
@@ -49,11 +60,7 @@
 
     for (let i = 0; i < count; i++) {
       const size = getSize(i);
-      const storageBuffer = device.createBuffer({
-        size: size,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
-        mappedAtCreation: true,
-      });
+      const storageBuffer = createStorageBuffer(size, true);
       const stagingArrayBuffer = storageBuffer.getMappedRange();
       new Uint8Array(stagingArrayBuffer).set(new Uint8Array(arrayBuffer, 0, size));
       storageBuffer.unmap();
@@ -66,10 +73,7 @@
 
     for (let i = 0; i < count; i++) {
       const size = getSize(i);
-      const storageBuffer = device.createBuffer({
-        size: size,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
-      });
+      const storageBuffer = createStorageBuffer(size);
       device.queue.writeBuffer(storageBuffer, 0, arrayBuffer, 0, size);
       device.queue.submit([]);
     }
@@ -81,10 +85,7 @@
 
     for (let i = 0; i < count; i++) {
       const size = getSize(i);
-      const storageBuffer = device.createBuffer({
-        size: size,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
-      });
+      const storageBuffer = createStorageBuffer(size);
       device.queue.writeBuffer(storageBuffer, 0, arrayBuffer, 0, size);
     }
     device.queue.submit([]);
@@ -96,10 +97,7 @@
 
     for (let i = 0; i < count; i++) {
       const size = getSize(i);
-      const storageBuffer = device.createBuffer({
-        size: size,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
-      });
+      const storageBuffer = createStorageBuffer(size);
       const stagingBuffer = device.createBuffer({
         size: size,
         usage: GPUBufferUsage.MAP_WRITE | GPUBufferUsage.COPY_SRC,
@@ -125,10 +123,7 @@
 
     for (let i = 0; i < count; i++) {
       const size = getSize(i);
-      const storageBuffer = device.createBuffer({
-        size: size,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
-      });
+      const storageBuffer = createStorageBuffer(size);
 
       if (stagingBufferPool.length) {
         console.log('stagingBuffer is reused');
@@ -163,10 +158,7 @@
 
     for (let i = 0; i < count; i++) {
       const size = getSize(i);
-      const storageBuffer = device.createBuffer({
-        size: size,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
-      });
+      const storageBuffer = createStorageBuffer(size);
 
       if (stagingBufferPool.length) {
         stagingBuffer = stagingBufferPool.pop();
@@ -207,10 +199,7 @@
 
     for (let i = 0; i < count; i++) {
       const size = getSize(i);
-      const storageBuffer = device.createBuffer({
-        size: size,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
-      });
+      const storageBuffer = createStorageBuffer(size);
 
       if (size > stagingBufferLeftSize) {
         // finish the old stagingBuffer
