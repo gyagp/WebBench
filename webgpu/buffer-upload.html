@@ -155,6 +155,7 @@
 
     const stagingBufferPool = [];
     let stagingBuffer;
+    const commandEncoder = device.createCommandEncoder();
 
     for (let i = 0; i < count; i++) {
       const size = getSize(i);
@@ -174,7 +175,6 @@
       new Uint8Array(stagingArrayBuffer).set(new Uint8Array(arrayBuffer, 0, size));
       stagingBuffer.unmap();
 
-      const commandEncoder = device.createCommandEncoder();
       commandEncoder.copyBufferToBuffer(stagingBuffer, 0, storageBuffer, 0, size);
     }
     device.queue.submit([commandEncoder.finish()]);
